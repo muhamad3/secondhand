@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/Home.dart';
 import 'package:secondhand/Screens/createacc.dart';
+import 'package:secondhand/Screens/posting.dart';
+import 'package:secondhand/Screens/profile.dart';
 import 'Screens/Login.dart';
 
 Future<void> main() async {
@@ -40,11 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
         '/': (context) => const Login(),
         '/createacc': (context) => const Createacc(),
         '/home': (context) => const Home(),
+        '/post': (context) => const Posting(),
+        '/profile': (context) => const Profile(),
       },
     );
   }
