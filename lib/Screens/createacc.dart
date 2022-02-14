@@ -20,7 +20,9 @@ class _CreateaccState extends State<Createacc> {
   TextEditingController? location = TextEditingController();
   TextEditingController? email = TextEditingController();
   TextEditingController? password = TextEditingController();
+  TextEditingController? password2 = TextEditingController();
   String Password = '';
+  String Password2 = '';
   String? username;
   String Email = '';
   String? loc;
@@ -93,7 +95,8 @@ class _CreateaccState extends State<Createacc> {
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           Container(
-            child: const TextField(
+            child:  TextField(
+              controller: password2,
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'your password again'),
@@ -111,15 +114,18 @@ class _CreateaccState extends State<Createacc> {
           ),
           ElevatedButton(
             onPressed: () {
+              Password = password?.value.text ?? '';
+              Password2 = password?.value.text ?? '';
+              if(password==password2){
               Email = email?.value.text ?? 'no email available';
               username = name?.value.text;
               loc = location?.value.text;
-              Password = password?.value.text ?? '';
               FirebaseFirestore.instance
                   .collection('users')
                   .add({'email': Email, 'name': username, 'location': loc});
               registerWithEmailAndPassword(Email, Password);
               uploadFile();
+            }
             },
             child: const Text('Register'),
             style: ButtonStyle(
