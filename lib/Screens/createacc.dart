@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'firebaseapi.dart';
+import 'sharedpreferences.dart';
 
 class Createacc extends StatefulWidget {
   const Createacc({Key? key}) : super(key: key);
@@ -95,9 +96,9 @@ class _CreateaccState extends State<Createacc> {
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           Container(
-            child:  TextField(
+            child: TextField(
               controller: password2,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'your password again'),
               obscureText: true,
@@ -107,7 +108,7 @@ class _CreateaccState extends State<Createacc> {
           Container(
             child: TextField(
               controller: location,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: 'where are you from'),
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -116,16 +117,17 @@ class _CreateaccState extends State<Createacc> {
             onPressed: () {
               Password = password?.value.text ?? '';
               Password2 = password?.value.text ?? '';
-              if(password==password2){
-              Email = email?.value.text ?? 'no email available';
-              username = name?.value.text;
-              loc = location?.value.text;
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .add({'email': Email, 'name': username, 'location': loc});
-              registerWithEmailAndPassword(Email, Password);
-              uploadFile();
-            }
+              
+                Email = email?.value.text ?? 'no email available';
+                username = name?.value.text;
+                loc = location?.value.text;
+                FirebaseFirestore.instance
+                    .collection('users').doc('name_$Email')
+                    .set({'email': Email, 'name': username, 'location': loc});
+                registerWithEmailAndPassword(Email, Password);
+                uploadFile();
+                Sharedpreference.setuser(username,Email,file!.path,loc);
+              
             },
             child: const Text('Register'),
             style: ButtonStyle(

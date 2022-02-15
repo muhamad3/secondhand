@@ -140,7 +140,7 @@ class _Posting extends State<Posting> {
                   Price = price?.value.text ?? 'no price available';
                   Descrioption =
                       descrioption?.value.text ?? 'description available';
-                  FirebaseFirestore.instance.collection('post').add({
+                  FirebaseFirestore.instance.collection('post').doc().set({
                     'Name': Name,
                     'Price': Price,
                     'Description': Descrioption
