@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'sharedpreferences.dart';
+import '../classes/sharedpreferences.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -19,7 +19,8 @@ class _Profile extends State<Profile> {
     getemail();
     getimage();
     getname();
-    getname();
+    getlocation();
+    getphonenumber();
   }
 
   int _selectedIndex = 2;
@@ -40,32 +41,20 @@ class _Profile extends State<Profile> {
   String? name;
   String? email;
   String? location;
+  String? phonenumber;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('profile')),
-      ),
       body: Center(
         child: SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
-              // Container(
-              //   child: ClipOval(
-              //     child: Image.file(
-              //       file!,
-              //       width: 160,
-              //       height: 160,
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),file != null
               file!=null? ClipOval(
                   child: Image.file(
                     File(file!),
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 150,
                     fit: BoxFit.cover,
                   ),
                 )
@@ -77,25 +66,21 @@ class _Profile extends State<Profile> {
                 ),
               Container(
                 child: Text(
-                  name ?? email ?? file ?? location ?? 'null',
+                 name ?? 'no name',style:const TextStyle(fontSize: 16),textAlign: TextAlign.center
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
               ),
               Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'the price'),
-                  keyboardType: TextInputType.number,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text('location: lives in $location ',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
               Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'description'),
-                  maxLines: 5,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text('Email: $email',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Container(
+                child: Text('Phone number: $phonenumber',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
             ]),
           ]),
@@ -142,5 +127,9 @@ class _Profile extends State<Profile> {
   getlocation() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     location = preference.getString('location');
+  }
+  getphonenumber() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    phonenumber = preference.getString('phonenumber');
   }
 }

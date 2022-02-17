@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'firebaseapi.dart';
-import 'sharedpreferences.dart';
+import '../classes/firebaseapi.dart';
+import '../classes/sharedpreferences.dart';
 
 class Createacc extends StatefulWidget {
   const Createacc({Key? key}) : super(key: key);
@@ -21,13 +21,12 @@ class _CreateaccState extends State<Createacc> {
   TextEditingController? location = TextEditingController();
   TextEditingController? email = TextEditingController();
   TextEditingController? password = TextEditingController();
-  TextEditingController? password2 = TextEditingController();
+  TextEditingController? phonenum = TextEditingController();
   String Password = '';
-  String Password2 = '';
+  String phonenumber = '';
   String? username;
   String Email = '';
   String? loc;
-
   Future pickimage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
@@ -89,7 +88,7 @@ class _CreateaccState extends State<Createacc> {
           Container(
             child: TextField(
               controller: password,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: 'your password'),
               obscureText: true,
             ),
@@ -97,11 +96,10 @@ class _CreateaccState extends State<Createacc> {
           ),
           Container(
             child: TextField(
-              controller: password2,
+              controller: phonenum,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'your password again'),
-              obscureText: true,
+                  border: OutlineInputBorder(), hintText: 'your phone number'),
+              keyboardType: TextInputType.phone,
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
@@ -109,35 +107,43 @@ class _CreateaccState extends State<Createacc> {
             child: TextField(
               controller: location,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'where are you from'),
+                  border: OutlineInputBorder(), hintText: 'where do you live'),
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           ElevatedButton(
             onPressed: () {
               Password = password?.value.text ?? '';
-              Password2 = password?.value.text ?? '';
-              
-                Email = email?.value.text ?? 'no email available';
-                username = name?.value.text;
-                loc = location?.value.text;
-                FirebaseFirestore.instance
-                    .collection('users').doc('name_$Email')
-                    .set({'email': Email, 'name': username, 'location': loc});
-                registerWithEmailAndPassword(Email, Password);
-                uploadFile();
-                Sharedpreference.setuser(username,Email,file!.path,loc);
-              
+              phonenumber = phonenum?.value.text ?? '';
+              Email = email?.value.text ?? 'no email available';
+              username = name?.value.text;
+              loc = location?.value.text;
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc('$username $Email')
+                  .set({
+                'email': Email,
+                'name': username,
+                'location': loc,
+                'phonenumber': phonenumber,
+              });
+
+              registerWithEmailAndPassword(Email, Password);
+
+              uploadFile();
+
+              Sharedpreference.setuser(username, Email,
+                  file?.path ?? 'no picture available', loc, phonenumber);
             },
             child: const Text('Register'),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
-              fixedSize: MaterialStateProperty.all(Size.fromWidth(180)),
+              fixedSize: MaterialStateProperty.all(const Size.fromWidth(180)),
             ),
           ),
           TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, '/home');
               },
               child: const Text('Already have an account?'))
         ],
@@ -149,7 +155,9 @@ class _CreateaccState extends State<Createacc> {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    Navigator.pop(this.context);
+    String? a = _firebaseAuth.currentUser!.uid;
+    print(a);
+    Navigator.popAndPushNamed(this.context, '/home');
   }
 
   Future selectFile() async {
@@ -159,13 +167,11 @@ class _CreateaccState extends State<Createacc> {
     final path = result.files.single.path!;
 
     setState(() => file = File(path));
-    uploadFile();
   }
 
   Future uploadFile() async {
     if (file == null) return;
 
-    final fileName = basename(file!.path);
     final destination = 'users/$Email';
     task = FirebaseApi.uploadFile(destination, file!);
 
@@ -175,7 +181,7 @@ class _CreateaccState extends State<Createacc> {
 
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-
+    
     print('Download-Link: $urlDownload');
   }
 }

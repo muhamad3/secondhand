@@ -9,7 +9,7 @@ import 'Screens/Login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => print('initialized'));
+  await Firebase.initializeApp().then((value) => print('firebase initialized'));
  
   runApp(const MyApp());
 }

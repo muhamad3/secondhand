@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:secondhand/Screens/firebaseapi.dart';
+import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
@@ -15,6 +16,11 @@ class Posting extends StatefulWidget {
 }
 
 class _Posting extends State<Posting> {
+    @override
+  void initState() {
+    super.initState();
+    getemail();
+  }
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
@@ -51,7 +57,7 @@ class _Posting extends State<Posting> {
     if (file == null) return;
 
     final fileName = basename(file!.path);
-    final destination = 'post/$fileName';
+    final destination = 'post/$Name$email';
     task = FirebaseApi.uploadFile(destination, file!);
 
     setState(() {});
@@ -73,7 +79,7 @@ class _Posting extends State<Posting> {
   String Name = '';
   String? Price = '0';
   String? Descrioption;
-
+  String? email;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,10 +146,11 @@ class _Posting extends State<Posting> {
                   Price = price?.value.text ?? 'no price available';
                   Descrioption =
                       descrioption?.value.text ?? 'description available';
-                  FirebaseFirestore.instance.collection('post').doc().set({
+                  FirebaseFirestore.instance.collection('post').doc(email!+Name).set({
                     'Name': Name,
                     'Price': Price,
-                    'Description': Descrioption
+                    'Description': Descrioption,
+                    'Email': email
                   });
 
                   uploadFile();
@@ -180,5 +187,11 @@ class _Posting extends State<Posting> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  getemail() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    email = preference.getString('email');
+    setState(() {});
   }
 }
