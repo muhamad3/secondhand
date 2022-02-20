@@ -7,8 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/Screens/Post.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:path/path.dart';
+import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,8 +19,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  void initState() {
+    super.initState();
+    getemail();
+  }
+
   int _selectedIndex = 0;
   final Storage storage = Storage();
+  String? email;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -52,16 +59,20 @@ class _HomeState extends State<Home> {
           snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
 
   Widget buildpost(Post post) => Column(
-        children: [ FutureBuilder(
+        children: [
+          FutureBuilder(
               future: storage.downloadurl('${post.name}${post.email}'),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData == true) {
+                    snapshot.hasData) {
                   return Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
                     width: 300,
                     height: 200,
-                    child: Image.network(snapshot.data??'',fit: BoxFit.cover ,),
+                    child: Image.network(
+                      snapshot.data ?? '',
+                      fit: BoxFit.cover,
+                    ),
                   );
                 }
                 return CircularProgressIndicator();
@@ -85,7 +96,7 @@ class _HomeState extends State<Home> {
       body: Center(
         child: Column(children: [
           Container(
-            margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
+              margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
               height: 550,
               child: StreamBuilder<List<Post>>(
                 stream: readPosts(),
@@ -96,7 +107,6 @@ class _HomeState extends State<Home> {
                   if (snapshot.hasData) {
                     final post = snapshot.data!;
                     return ListView(
-                      
                       children: post.map(buildpost).toList(),
                     );
                   } else {
@@ -146,6 +156,12 @@ class _HomeState extends State<Home> {
     final destination = 'file$fileName';
     task = FirebaseApi.uploadFile(destination, file!);
 
+    setState(() {});
+  }
+
+  getemail() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    email = preference.getString('email');
     setState(() {});
   }
 }

@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import '../classes/firebaseapi.dart';
 import '../classes/sharedpreferences.dart';
 
@@ -27,6 +26,7 @@ class _CreateaccState extends State<Createacc> {
   String? username;
   String Email = '';
   String? loc;
+  String? urldownload;
   Future pickimage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
@@ -112,28 +112,29 @@ class _CreateaccState extends State<Createacc> {
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: ()async {
               Password = password?.value.text ?? '';
               phonenumber = phonenum?.value.text ?? '';
               Email = email?.value.text ?? 'no email available';
               username = name?.value.text;
               loc = location?.value.text;
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc('$username $Email')
-                  .set({
+             await uploadFile();
+
+             await registerWithEmailAndPassword(Email, Password);
+               FirebaseFirestore.instance.collection('users').doc(Email).set({
                 'email': Email,
                 'name': username,
                 'location': loc,
                 'phonenumber': phonenumber,
+                'image':file?.path
               });
-
-              registerWithEmailAndPassword(Email, Password);
-
-              uploadFile();
+              
 
               Sharedpreference.setuser(username, Email,
                   file?.path ?? 'no picture available', loc, phonenumber);
+
+                  Navigator.popAndPushNamed(this.context, '/home');
+                  
             },
             child: const Text('Register'),
             style: ButtonStyle(
@@ -157,7 +158,7 @@ class _CreateaccState extends State<Createacc> {
         email: email, password: password);
     String? a = _firebaseAuth.currentUser!.uid;
     print(a);
-    Navigator.popAndPushNamed(this.context, '/home');
+    
   }
 
   Future selectFile() async {
@@ -175,13 +176,20 @@ class _CreateaccState extends State<Createacc> {
     final destination = 'users/$Email';
     task = FirebaseApi.uploadFile(destination, file!);
 
-    setState(() {});
-
     if (task == null) return;
 
     final snapshot = await task!.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    await snapshot.ref.getDownloadURL().then((value) => setState(() {
+        
+          urldownload = value;
+            debugPrint(urldownload);
+ 
+        })
+
+        ); 
+
+    print('Download-Link: $urldownload');
     
-    print('Download-Link: $urlDownload');
   }
 }

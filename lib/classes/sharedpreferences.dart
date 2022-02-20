@@ -15,4 +15,11 @@ class Sharedpreference {
     preference.setString('phonenumber', phonenumber ?? 'no location available');
     print(phonenumber);
   }
+  static Future<void> setemail(email) async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+
+    preference.setString('email', email ?? 'no email available');
+    print(email);
+   
+  }
 }

@@ -5,8 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
-import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
@@ -16,11 +14,6 @@ class Posting extends StatefulWidget {
 }
 
 class _Posting extends State<Posting> {
-    @override
-  void initState() {
-    super.initState();
-    getemail();
-  }
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
@@ -56,7 +49,6 @@ class _Posting extends State<Posting> {
   Future uploadFile() async {
     if (file == null) return;
 
-    final fileName = basename(file!.path);
     final destination = 'post/$Name$email';
     task = FirebaseApi.uploadFile(destination, file!);
 
@@ -101,10 +93,10 @@ class _Posting extends State<Posting> {
                         ),
                       )
                     : Container(
-                        child: FlutterLogo(
+                        child: const FlutterLogo(
                           size: 100,
                         ),
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                       ),
               ),
               ElevatedButton(
@@ -112,7 +104,7 @@ class _Posting extends State<Posting> {
                     pickimage();
                     selectFile();
                   },
-                  child: Text('pick an image from gallery')),
+                  child: const Text('pick an image from gallery')),
               Container(
                 child: TextField(
                   controller: name,
@@ -125,8 +117,8 @@ class _Posting extends State<Posting> {
               Container(
                 child: TextField(
                   controller: price,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'the price'),
+                  decoration: const InputDecoration(
+                      border:  OutlineInputBorder(), hintText: 'the price'),
                   keyboardType: TextInputType.number,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -134,7 +126,7 @@ class _Posting extends State<Posting> {
               Container(
                 child: TextField(
                   controller: descrioption,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: 'description'),
                   maxLines: 5,
                 ),
@@ -156,11 +148,11 @@ class _Posting extends State<Posting> {
                   uploadFile();
                   Navigator.popAndPushNamed(context, '/post');
                 },
-                child: const Text('Register'),
+                child: const Text('Post'),
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.cyan),
-                  fixedSize: MaterialStateProperty.all(Size.fromWidth(180)),
+                  fixedSize: MaterialStateProperty.all(const Size.fromWidth(180)),
                 ),
               ),
             ]),
@@ -189,9 +181,5 @@ class _Posting extends State<Posting> {
     );
   }
 
-  getemail() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    email = preference.getString('email');
-    setState(() {});
-  }
+
 }

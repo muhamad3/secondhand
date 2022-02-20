@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:secondhand/Screens/Post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../classes/sharedpreferences.dart';
@@ -24,6 +27,7 @@ class _Profile extends State<Profile> {
   }
 
   int _selectedIndex = 2;
+  String? test;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -50,38 +54,52 @@ class _Profile extends State<Profile> {
         child: SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
-              file!=null? ClipOval(
-                  child: Image.file(
-                    File(file!),
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : Image.network(
-                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                  width: 100,
-                  height: 100,
-                  alignment: Alignment.center,
-                ),
+              file != null
+                  ? ClipOval(
+                      child: Image.file(
+                        File(file!),
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Image.network(
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                    ),
               Container(
-                child: Text(
-                 name ?? 'no name',style:const TextStyle(fontSize: 16),textAlign: TextAlign.center
-                ),
+                child: Text(name ?? 'no name',
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center),
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
               ),
               Container(
-                child: Text('location: lives in $location ',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                child: Text(
+                  'location: lives in $location ',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
               Container(
-                child: Text('Email: $email',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                child: Text(
+                  'Email: $email',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
               Container(
-                child: Text('Phone number: $phonenumber',style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
+                child: Text(
+                  'Phone number: $phonenumber',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
+            
             ]),
           ]),
         ),
@@ -128,8 +146,12 @@ class _Profile extends State<Profile> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     location = preference.getString('location');
   }
+
   getphonenumber() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     phonenumber = preference.getString('phonenumber');
   }
+
+ 
+
 }
