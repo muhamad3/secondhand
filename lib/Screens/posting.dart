@@ -92,12 +92,12 @@ class _Posting extends State<Posting> {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : Container(
-                        child: const FlutterLogo(
-                          size: 100,
-                        ),
-                        margin: const EdgeInsets.all(10),
-                      ),
+                    : Image.network(
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                    ),
               ),
               ElevatedButton(
                   onPressed: () {

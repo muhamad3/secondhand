@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand/Screens/Post.dart';
+import 'package:secondhand/classes/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../classes/sharedpreferences.dart';
@@ -50,6 +51,8 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('profile'),),
+      drawer:NavigationDrawerWidget(),
       body: Center(
         child: SingleChildScrollView(
           child: Stack(children: <Widget>[

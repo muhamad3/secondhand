@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/profile',
       routes: {
         '/': (context) => const Login(),
         '/createacc': (context) => const Createacc(),
