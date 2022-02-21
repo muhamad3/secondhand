@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:secondhand/Screens/Post.dart';
+import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:path/path.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
@@ -87,8 +87,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : 'No File Selected';
-
     return Scaffold(
       appBar: AppBar(
         title: Text('home'),
@@ -115,7 +113,8 @@ class _HomeState extends State<Home> {
                     );
                   }
                 },
-              ))
+              )
+              )
         ]),
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
@@ -14,6 +15,11 @@ class Posting extends StatefulWidget {
 }
 
 class _Posting extends State<Posting> {
+   @override
+  void initState() {
+    super.initState();
+    getemail();
+  }
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
@@ -100,6 +106,9 @@ class _Posting extends State<Posting> {
                     ),
               ),
               ElevatedButton(
+                 style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+            ),
                   onPressed: () {
                     pickimage();
                     selectFile();
@@ -136,8 +145,7 @@ class _Posting extends State<Posting> {
                 onPressed: () {
                   Name = name?.value.text ?? 'no name avialable';
                   Price = price?.value.text ?? 'no price available';
-                  Descrioption =
-                      descrioption?.value.text ?? 'description available';
+                  Descrioption = descrioption?.value.text ?? 'description available';
                   FirebaseFirestore.instance.collection('post').doc(email!+Name).set({
                     'Name': Name,
                     'Price': Price,
@@ -180,6 +188,10 @@ class _Posting extends State<Posting> {
       ),
     );
   }
-
+  getemail() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    email = preference.getString('email');
+    setState(() {});
+  }
 
 }

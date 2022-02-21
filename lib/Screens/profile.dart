@@ -1,12 +1,10 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:secondhand/Screens/Post.dart';
+import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/drawer.dart';
+import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../classes/sharedpreferences.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -47,16 +45,59 @@ class _Profile extends State<Profile> {
   String? email;
   String? location;
   String? phonenumber;
+  final Storage storage = Storage();
+
+  Stream<List<Post>> readPosts() => FirebaseFirestore.instance
+      .collection('post')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
+
+  Widget buildpost(Post post) => Column(
+        children: [
+          FutureBuilder(
+              future: storage.downloadurl('${post.name}${post.email}'),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData && post.email== email) {
+                  return Column(children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                      width: 300,
+                      height: 200,
+                      child: Image.network(
+                        snapshot.data ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Text('name:${post.name}'),
+            Text('price:${post.price}'),
+          ]),
+          Text(post.description ?? ' no description available')
+                  ]);
+                }
+                return Text('');
+              }),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('profile'),),
-      drawer:NavigationDrawerWidget(),
-      body: Center(
+      appBar: AppBar(
+        title: Text('profile'),
+      ),
+      drawer: NavigationDrawerWidget(),
+      body: Stack(
+    children: <Widget>[
+      Center(
         child: SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
+              SizedBox(
+                height: 25,
+              ),
               file != null
                   ? ClipOval(
                       child: Image.file(
@@ -102,11 +143,31 @@ class _Profile extends State<Profile> {
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
-            
+              Container(
+                  margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
+                  height: 550,
+                  child: StreamBuilder<List<Post>>(
+                    stream: readPosts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('erorr');
+                      }
+                      if (snapshot.hasData) {
+                        final post = snapshot.data!;
+                        return ListView(
+                          children: post.map(buildpost).toList(),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ))
             ]),
           ]),
         ),
-      ),
+      ),]),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -154,7 +215,4 @@ class _Profile extends State<Profile> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     phonenumber = preference.getString('phonenumber');
   }
-
- 
-
 }

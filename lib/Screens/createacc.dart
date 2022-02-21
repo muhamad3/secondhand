@@ -65,6 +65,9 @@ class _CreateaccState extends State<Createacc> {
                   alignment: Alignment.center,
                 ),
           ElevatedButton(
+           style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+            ),
               onPressed: () {
                 pickimage();
               },
