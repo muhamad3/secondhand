@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:path/path.dart';
-import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,11 +76,17 @@ class _HomeState extends State<Home> {
                 }
                 return CircularProgressIndicator();
               }),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+           children: [
             Text('name:${post.name}'),
             Text('price:${post.price}'),
+            
           ]),
-          Text(post.description ?? ' no description available')
+          SizedBox(height: 5,),
+          Text('email:${post.email}'),
+          SizedBox(height: 5,),
+          Container(child: Text(post.description ?? ' no description available',)
+          ,margin: EdgeInsets.all(10),)
         ],
       );
 
@@ -113,8 +118,7 @@ class _HomeState extends State<Home> {
                     );
                   }
                 },
-              )
-              )
+              ))
         ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
