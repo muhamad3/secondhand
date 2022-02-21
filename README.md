@@ -1,16 +1,3 @@
 # secondhand
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+this application is for selling and buying second hand items
+i used firestore to store the information and pictures and sharedpreferences to store info about user when he/she logs in and image picker for users to pick image from their phone to upload for their profile picture and their post the user can see peoples posts and their own posts seperately
