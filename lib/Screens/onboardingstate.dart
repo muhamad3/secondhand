@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -83,9 +82,9 @@ class _OnboardingStateState extends State<OnboardingState> {
             buildPage(
                 color: Colors.cyan,
                 urlImage: 'lib/assets/sell.png',
-                title: 'Buy',
+                title: 'Low prices',
                 subtitle:
-                    'Buy second hand items from all around your country without leaving your house'),
+                    'Buy second hand items for a discounted price'),
           ],
         ),
       ),

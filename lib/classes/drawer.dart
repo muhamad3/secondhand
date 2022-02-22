@@ -38,16 +38,16 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
             Row(
               children: [
                 file != null
-                    ? Container(margin: EdgeInsets.all(10),
-                       child:  ClipOval(
-                        child: Image.file(
-                          File(file!),
-                          width: 75,
-                          height: 75,
-                          fit: BoxFit.cover,
-                          
-                        ),
-                      ))
+                    ? Container(
+                        margin: EdgeInsets.all(10),
+                        child: ClipOval(
+                          child: Image.file(
+                            File(file!),
+                            width: 75,
+                            height: 75,
+                            fit: BoxFit.cover,
+                          ),
+                        ))
                     : ClipOval(
                         child: Image.network(
                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -55,15 +55,19 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                         height: 100,
                         alignment: Alignment.center,
                       )),
-                Text(' $name \n $email \n $phonenumber',style: TextStyle(color: Colors.white),)
+                Text(
+                  ' $name \n $email \n $phonenumber',
+                  style: TextStyle(color: Colors.white),
+                )
               ],
             ),
-            buildMenuItem(text: 'people', icon: Icons.people),
+           
             buildMenuItem(
                 text: 'Logout',
                 icon: Icons.power_settings_new,
                 onclick: () {
                   Sharedpreference.setuser('', '', '', '', '');
+                  Sharedpreference.isnotlogedin();
                   Navigator.popAndPushNamed(context, '/login');
                 }),
           ],

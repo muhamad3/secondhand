@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/Users.dart';
 import 'package:secondhand/classes/storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../classes/sharedpreferences.dart';
 
 class Login extends StatefulWidget {
@@ -37,13 +38,11 @@ class _Login extends State<Login> {
     var value =
         await FirebaseFirestore.instance.collection('users').doc(Email).get();
     Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
-    Sharedpreference.setuser(
-        _user.name, _user.email, _user.image, _user.location, _user.phonenumber);
+    Sharedpreference.setuser(_user.name, _user.email, _user.image,
+        _user.location, _user.phonenumber);
     debugPrint(_user.toString());
     return _user;
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +78,7 @@ class _Login extends State<Login> {
             Password = password.value.text;
             getuser();
             loginWithEmailAndPassword(Email, Password);
+            Sharedpreference.islogedin();
           },
           child: const Text('Login'),
           style: ButtonStyle(

@@ -23,4 +23,12 @@ class Sharedpreference {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     preference.setBool('firsttime', false);   
   }
+  static Future<void> islogedin() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    preference.setBool('logedin', true);   
+  }
+  static Future<void> isnotlogedin() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    preference.setBool('logedin', false);   
+  }
 }

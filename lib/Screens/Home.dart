@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
           snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
 
   Widget buildpost(Post post) => Column(
+    
         children: [
           FutureBuilder(
               future: storage.downloadurl('${post.name}${post.email}'),
@@ -86,7 +87,7 @@ class _HomeState extends State<Home> {
           Text('email:${post.email}'),
           SizedBox(height: 5,),
           Container(child: Text(post.description ?? ' no description available',)
-          ,margin: EdgeInsets.all(10),)
+          ,margin: EdgeInsets.all(20),)
         ],
       );
 
@@ -98,9 +99,8 @@ class _HomeState extends State<Home> {
       ),
       body: Center(
         child: Column(children: [
-          Container(
-              margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
-              height: 550,
+          Expanded(
+            
               child: StreamBuilder<List<Post>>(
                 stream: readPosts(),
                 builder: (context, snapshot) {

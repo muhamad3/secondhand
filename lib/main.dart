@@ -1,4 +1,3 @@
- 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/Home.dart';
@@ -12,7 +11,7 @@ import 'Screens/Login.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) => print('firebase initialized'));
- 
+
   runApp(const MyApp());
 }
 
@@ -38,26 +37,29 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
-  
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   bool? isfirsttime;
-    @override
+  bool? islogedin;
+  @override
   void initState() {
     super.initState();
     isfirstime();
+    islogedinf();
   }
 
- 
   @override
   Widget build(BuildContext context) {
-  
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => isfirsttime?? true ?OnboardingState() :Login() ,
-        '/login': (context) => const Login(),
+        '/': (context) => isfirsttime ?? true
+            ? OnboardingState()
+            : islogedin ?? true
+                ? Home()
+                : Login(),
+        '/login': (context) => islogedin ?? false ? Home() : Login(),
         '/createacc': (context) => const Createacc(),
         '/home': (context) => const Home(),
         '/post': (context) => const Posting(),
@@ -65,12 +67,17 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-   isfirstime() async {
+
+  isfirstime() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-   isfirsttime = preference.getBool('firsttime');
+    isfirsttime = preference.getBool('firsttime');
     setState(() {});
   }
-  
+
+  islogedinf() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    islogedin = preference.getBool('logedin');
+    print(islogedin);
+    setState(() {});
+  }
 }
-
-
