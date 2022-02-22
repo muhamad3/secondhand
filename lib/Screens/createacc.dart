@@ -147,7 +147,7 @@ class _CreateaccState extends State<Createacc> {
           ),
           TextButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, '/home');
+                Navigator.popAndPushNamed(context, '/login');
               },
               child: const Text('Already have an account?'))
         ],

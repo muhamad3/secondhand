@@ -64,7 +64,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                 icon: Icons.power_settings_new,
                 onclick: () {
                   Sharedpreference.setuser('', '', '', '', '');
-                  Navigator.popAndPushNamed(context, '/');
+                  Navigator.popAndPushNamed(context, '/login');
                 }),
           ],
         ),
