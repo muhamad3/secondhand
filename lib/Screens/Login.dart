@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/Users.dart';
 import 'package:secondhand/classes/storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../classes/sharedpreferences.dart';
 
 class Login extends StatefulWidget {
@@ -100,7 +99,6 @@ class _Login extends State<Login> {
       String email, String password) async {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => Navigator.popAndPushNamed(context, '/home'))
-        .catchError((e) => debugPrint(e.toString()));
+        .then((value) => Navigator.popAndPushNamed(context, '/home'));
   }
 }

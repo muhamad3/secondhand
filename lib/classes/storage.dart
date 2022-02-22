@@ -1,7 +1,4 @@
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =

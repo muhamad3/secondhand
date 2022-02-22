@@ -17,9 +17,10 @@ class Sharedpreference {
   }
   static Future<void> setemail(email) async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-
-    preference.setString('email', email ?? 'no email available');
-    print(email);
-   
+    preference.setString('email', email ?? 'no email available');   
+  }
+  static Future<void> isfirsttime() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    preference.setBool('firsttime', false);   
   }
 }
