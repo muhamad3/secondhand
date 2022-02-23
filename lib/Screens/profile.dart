@@ -58,7 +58,8 @@ class _Profile extends State<Profile> {
               future: storage.downloadurl('${post.name}${post.email}'),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData && post.email== email) {
+                    snapshot.hasData &&
+                    post.email == email) {
                   return Column(children: [
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
@@ -69,11 +70,21 @@ class _Profile extends State<Profile> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Text('name:${post.name}'),
-            Text('price:${post.price}'),
-          ]),
-          Text(post.description ?? ' no description available')
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('name:${post.name}'),
+                          Text('price:${post.price}'),
+                        ]),
+                    Text(post.description ?? ' no description available'),
+                    ElevatedButton(
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('post')
+                              .doc(post.email!+post.name!)
+                              .delete();
+                        },
+                        child: Text('delete this post'))
                   ]);
                 }
                 return Text('');
@@ -88,85 +99,85 @@ class _Profile extends State<Profile> {
         title: Text('profile'),
       ),
       drawer: NavigationDrawerWidget(),
-      body: Stack(
-    children: <Widget>[
-      Center(
-        child: SingleChildScrollView(
-          child: Stack(children: <Widget>[
-            Column(children: [
-              SizedBox(
-                height: 25,
-              ),
-              file != null
-                  ? ClipOval(
-                      child: Image.file(
-                        File(file!),
-                        width: 150,
-                        height: 150,
-                        fit: BoxFit.cover,
+      body: Stack(children: <Widget>[
+        Center(
+          child: SingleChildScrollView(
+            child: Stack(children: <Widget>[
+              Column(children: [
+                SizedBox(
+                  height: 25,
+                ),
+                file != null
+                    ? ClipOval(
+                        child: Image.file(
+                          File(file!),
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Image.network(
+                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        width: 100,
+                        height: 100,
+                        alignment: Alignment.center,
                       ),
-                    )
-                  : Image.network(
-                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                    ),
-              Container(
-                child: Text(name ?? 'no name',
-                    style: const TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center),
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'location: lives in $location ',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
+                Container(
+                  child: Text(name ?? 'no name',
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center),
+                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'Email: $email',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
+                Container(
+                  child: Text(
+                    'location: lives in $location ',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'Phone number: $phonenumber',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
+                Container(
+                  child: Text(
+                    'Email: $email',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
-                  height: 550,
-                  child: StreamBuilder<List<Post>>(
-                    stream: readPosts(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('erorr');
-                      }
-                      if (snapshot.hasData) {
-                        final post = snapshot.data!;
-                        return ListView(
-                          children: post.map(buildpost).toList(),
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                  ))
+                Container(
+                  child: Text(
+                    'Phone number: $phonenumber',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                ),
+                Container(
+                    margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
+                    height: 550,
+                    child: StreamBuilder<List<Post>>(
+                      stream: readPosts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('erorr');
+                        }
+                        if (snapshot.hasData) {
+                          final post = snapshot.data!;
+                          return ListView(
+                            children: post.map(buildpost).toList(),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ))
+              ]),
             ]),
-          ]),
+          ),
         ),
-      ),]),
+      ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

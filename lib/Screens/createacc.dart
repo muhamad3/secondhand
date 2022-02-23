@@ -65,9 +65,9 @@ class _CreateaccState extends State<Createacc> {
                   alignment: Alignment.center,
                 ),
           ElevatedButton(
-           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
-            ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+              ),
               onPressed: () {
                 pickimage();
               },
@@ -115,29 +115,27 @@ class _CreateaccState extends State<Createacc> {
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           ElevatedButton(
-            onPressed: ()async {
+            onPressed: () async {
               Password = password?.value.text ?? '';
               phonenumber = phonenum?.value.text ?? '';
               Email = email?.value.text ?? 'no email available';
               username = name?.value.text;
               loc = location?.value.text;
-             await uploadFile();
+              await uploadFile();
 
-             await registerWithEmailAndPassword(Email, Password);
-               FirebaseFirestore.instance.collection('users').doc(Email).set({
+              await registerWithEmailAndPassword(Email, Password);
+              FirebaseFirestore.instance.collection('users').doc(Email).set({
                 'email': Email,
                 'name': username,
                 'location': loc,
                 'phonenumber': phonenumber,
-                'image':file?.path
+                'image': file?.path
               });
-              
 
               Sharedpreference.setuser(username, Email,
                   file?.path ?? 'no picture available', loc, phonenumber);
-
-                  Navigator.popAndPushNamed(this.context, '/home');
-                  
+              Sharedpreference.islogedin();
+              Navigator.popAndPushNamed(this.context, '/home');
             },
             child: const Text('Register'),
             style: ButtonStyle(
@@ -161,7 +159,6 @@ class _CreateaccState extends State<Createacc> {
         email: email, password: password);
     String? a = _firebaseAuth.currentUser!.uid;
     print(a);
-    
   }
 
   Future selectFile() async {
@@ -184,15 +181,10 @@ class _CreateaccState extends State<Createacc> {
     final snapshot = await task!.whenComplete(() {});
 
     await snapshot.ref.getDownloadURL().then((value) => setState(() {
-        
           urldownload = value;
-            debugPrint(urldownload);
- 
-        })
-
-        ); 
+          debugPrint(urldownload);
+        }));
 
     print('Download-Link: $urldownload');
-    
   }
 }

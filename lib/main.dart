@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
             : islogedin ?? true
                 ? Home()
                 : Login(),
-        '/login': (context) => islogedin ?? false ? Home() : Login(),
+        '/login': (context) => Login(),
         '/createacc': (context) => const Createacc(),
         '/home': (context) => const Home(),
         '/post': (context) => const Posting(),
