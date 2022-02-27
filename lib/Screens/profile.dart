@@ -23,7 +23,9 @@ class _Profile extends State<Profile> {
     getname();
     getlocation();
     getphonenumber();
-    downloadurl();
+    setState(() {
+      
+    });
   }
 
   int _selectedIndex = 2;
@@ -99,14 +101,7 @@ class _Profile extends State<Profile> {
               }),
         ],
       );
-  downloadurl() async {
-    image = await firebase_storage.FirebaseStorage.
-    instance.ref('users/hama@gmail.com').getDownloadURL();
-    setState(() {
-      
-    });
-    print('===================================>$image');
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -225,6 +220,8 @@ class _Profile extends State<Profile> {
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
+        image = await firebase_storage.FirebaseStorage
+    .instance.ref('users/$email').getDownloadURL();
     setState(() {});
   }
 
@@ -237,4 +234,5 @@ class _Profile extends State<Profile> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     phonenumber = preference.getString('phonenumber');
   }
+
 }

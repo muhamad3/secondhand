@@ -18,7 +18,6 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     getimage();
     getname();
     getphonenumber();
-    downloadurl();
   }
 
   String? file;
@@ -26,14 +25,6 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
   String? email;
   String? image;
   String? phonenumber;
-
-  downloadurl() async {
-    image = await firebase_storage.FirebaseStorage.instance
-        .ref('users/hama@gmail.com')
-        .getDownloadURL();
-    setState(() {});
-    print('===================================>$image');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +95,9 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
+    image = await firebase_storage.FirebaseStorage.instance
+        .ref('users/$email')
+        .getDownloadURL();
     setState(() {});
   }
 

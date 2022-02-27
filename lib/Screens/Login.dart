@@ -25,7 +25,7 @@ class _Login extends State<Login> {
   String? name = 'no name available';
   String? phonenumber = 'no phonenumber available';
   String? location = 'no location available';
-  String image = '';
+
 
   Stream<List<Users>> readUsers() => FirebaseFirestore.instance
       .collection('users')
@@ -39,7 +39,6 @@ class _Login extends State<Login> {
     Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
     Sharedpreference.setuser(_user.name, _user.email,
         _user.location, _user.phonenumber);
-    debugPrint(_user.toString());
     return _user;
   }
 

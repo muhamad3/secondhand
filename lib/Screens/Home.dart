@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/Post.dart';
-import 'package:secondhand/classes/firebaseapi.dart';
-import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../classes/Users.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -26,6 +25,11 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   final Storage storage = Storage();
   String? email;
+  String? name = '';
+  String? phonenumber = '';
+  String? location = '';
+  String? image = '';
+  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -57,8 +61,15 @@ class _HomeState extends State<Home> {
       .map((snapshot) =>
           snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
 
-  Widget buildpost(Post post) => Column(
-    
+  Widget buildpost(Post post) => GestureDetector(
+      onTap: () async {
+        await getuser(post.email ?? '');
+        setState(() {});
+
+        opendialog();
+      },
+      child: Container(
+          child: Column(
         children: [
           FutureBuilder(
               future: storage.downloadurl('${post.name}${post.email}'),
@@ -77,19 +88,25 @@ class _HomeState extends State<Home> {
                 }
                 return CircularProgressIndicator();
               }),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-           children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Text('name:${post.name}'),
             Text('price:${post.price}'),
-            
           ]),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text('email:${post.email}'),
-          SizedBox(height: 5,),
-          Container(child: Text(post.description ?? ' no description available',)
-          ,margin: EdgeInsets.all(20),)
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            child: Text(
+              post.description ?? ' no description available',
+            ),
+            margin: EdgeInsets.all(20),
+          )
         ],
-      );
+      )));
 
   @override
   Widget build(BuildContext context) {
@@ -100,25 +117,24 @@ class _HomeState extends State<Home> {
       body: Center(
         child: Column(children: [
           Expanded(
-            
               child: StreamBuilder<List<Post>>(
-                stream: readPosts(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('erorr');
-                  }
-                  if (snapshot.hasData) {
-                    final post = snapshot.data!;
-                    return ListView(
-                      children: post.map(buildpost).toList(),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ))
+            stream: readPosts(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('erorr');
+              }
+              if (snapshot.hasData) {
+                final post = snapshot.data!;
+                return ListView(
+                  children: post.map(buildpost).toList(),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ))
         ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -143,28 +159,79 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    if (result == null) return;
-    final path = result.files.single.path!;
-
-    setState(() => file = File(path));
-  }
-
-  Future uploadFile() async {
-    if (file == null) return;
-
-    final fileName = basename(file!.path);
-    final destination = 'file$fileName';
-    task = FirebaseApi.uploadFile(destination, file!);
-
-    setState(() {});
-  }
-
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
     setState(() {});
   }
+
+  getuser(String email) async {
+    var value =
+        await FirebaseFirestore.instance.collection('users').doc(email).get();
+    Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
+    name = _user.name;
+    location = _user.location;
+    phonenumber = _user.phonenumber;
+    image = await firebase_storage.FirebaseStorage.instance
+        .ref('users/$email')
+        .getDownloadURL();
+    setState(() {});
+  }
+
+  Future opendialog() => showDialog(
+      context: this.context,
+      builder: (context) => AlertDialog(
+          title: const Text(
+            'Sellers profile',
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+            color: Colors.grey[300],
+            width: 300,
+            height: 400,
+            child: Column(
+              children: [
+                ClipOval(
+                  child: Image.network(
+                    image ??
+                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  child: Text(name ?? 'no name',
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center),
+                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+                ),
+                Container(
+                  child: Text(
+                    'location: lives in $location ',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                ),
+                Container(
+                  child: Text(
+                    'Email: $email',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                ),
+                Container(
+                  child: Text(
+                    'Phone number: $phonenumber',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                ),
+               
+              ],
+            ),
+          )));
 }

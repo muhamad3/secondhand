@@ -15,12 +15,14 @@ class Posting extends StatefulWidget {
 }
 
 class _Posting extends State<Posting> {
-   @override
+  @override
   void initState() {
     super.initState();
     getemail();
   }
+
   int _selectedIndex = 1;
+  int _value = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,7 +51,6 @@ class _Posting extends State<Posting> {
     final path = result.files.single.path!;
 
     setState(() => file = File(path));
-    uploadFile();
   }
 
   Future uploadFile() async {
@@ -59,13 +60,6 @@ class _Posting extends State<Posting> {
     task = FirebaseApi.uploadFile(destination, file!);
 
     setState(() {});
-
-    if (task == null) return;
-
-    final snapshot = await task!.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    print('Download-Link: $urlDownload');
   }
 
   UploadTask? task;
@@ -99,16 +93,17 @@ class _Posting extends State<Posting> {
                         ),
                       )
                     : Image.network(
-                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                    ),
+                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        width: 100,
+                        height: 100,
+                        alignment: Alignment.center,
+                      ),
               ),
               ElevatedButton(
-                 style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
-            ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.cyan),
+                  ),
                   onPressed: () {
                     pickimage();
                     selectFile();
@@ -127,11 +122,32 @@ class _Posting extends State<Posting> {
                 child: TextField(
                   controller: price,
                   decoration: const InputDecoration(
-                      border:  OutlineInputBorder(), hintText: 'the price'),
+                      border: OutlineInputBorder(), hintText: 'the price'),
                   keyboardType: TextInputType.number,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               ),
+              Row(children: [
+                Text('       Currency :'),
+                Radio(
+                    value: 1,
+                    groupValue: _value,
+                    onChanged: (value) {
+                      setState(() {
+                        _value = int.parse(value.toString());
+                      });
+                    }),
+                Text('USD'),
+                Radio(
+                    value: 2,
+                    groupValue: _value,
+                    onChanged: (value) {
+                      setState(() {
+                        _value = int.parse(value.toString());
+                      });
+                    }),
+                Text('IQD'),
+              ]),
               Container(
                 child: TextField(
                   controller: descrioption,
@@ -145,8 +161,17 @@ class _Posting extends State<Posting> {
                 onPressed: () {
                   Name = name?.value.text ?? 'no name avialable';
                   Price = price?.value.text ?? 'no price available';
-                  Descrioption = descrioption?.value.text ?? 'description available';
-                  FirebaseFirestore.instance.collection('post').doc(email!+Name).set({
+                  if (_value == 1) {
+                    Price = "$Price"r" $";
+                  }else if(_value==2){
+                    Price = "$Price IQD";
+                  }
+                  Descrioption =
+                      descrioption?.value.text ?? 'no description available';
+                  FirebaseFirestore.instance
+                      .collection('post')
+                      .doc(email! + Name)
+                      .set({
                     'Name': Name,
                     'Price': Price,
                     'Description': Descrioption,
@@ -160,7 +185,8 @@ class _Posting extends State<Posting> {
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.cyan),
-                  fixedSize: MaterialStateProperty.all(const Size.fromWidth(180)),
+                  fixedSize:
+                      MaterialStateProperty.all(const Size.fromWidth(180)),
                 ),
               ),
             ]),
@@ -188,10 +214,10 @@ class _Posting extends State<Posting> {
       ),
     );
   }
+
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
     setState(() {});
   }
-
 }
