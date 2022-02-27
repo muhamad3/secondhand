@@ -132,8 +132,7 @@ class _CreateaccState extends State<Createacc> {
                 'image': file?.path
               });
 
-              Sharedpreference.setuser(username, Email,
-                  file?.path ?? 'no picture available', loc, phonenumber);
+              Sharedpreference.setuser(username, Email, loc, phonenumber);
               Sharedpreference.islogedin();
               Navigator.popAndPushNamed(this.context, '/home');
             },

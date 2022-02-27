@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,12 +18,22 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     getimage();
     getname();
     getphonenumber();
+    downloadurl();
   }
 
   String? file;
   String? name;
   String? email;
+  String? image;
   String? phonenumber;
+
+  downloadurl() async {
+    image = await firebase_storage.FirebaseStorage.instance
+        .ref('users/hama@gmail.com')
+        .getDownloadURL();
+    setState(() {});
+    print('===================================>$image');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,36 +47,26 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
             ),
             Row(
               children: [
-                file != null
-                    ? Container(
-                        margin: EdgeInsets.all(10),
-                        child: ClipOval(
-                          child: Image.file(
-                            File(file!),
-                            width: 75,
-                            height: 75,
-                            fit: BoxFit.cover,
-                          ),
-                        ))
-                    : ClipOval(
-                        child: Image.network(
+                ClipOval(
+                  child: Image.network(
+                    image ??
                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                        width: 100,
-                        height: 100,
-                        alignment: Alignment.center,
-                      )),
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 Text(
                   ' $name \n $email \n $phonenumber',
                   style: TextStyle(color: Colors.white),
                 )
               ],
             ),
-           
             buildMenuItem(
                 text: 'Logout',
                 icon: Icons.power_settings_new,
                 onclick: () {
-                  Sharedpreference.setuser('', '', '', '', '');
+                  Sharedpreference.setuser('', '', '', '');
                   Sharedpreference.isnotlogedin();
                   Navigator.popAndPushNamed(context, '/login');
                 }),

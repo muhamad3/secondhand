@@ -5,22 +5,19 @@ class Users {
   String? name;
   String? phonenumber;
   String? email;
-  String? image;
 
   Users({
     this.location,
     this.name,
     this.phonenumber,
     this.email,
-    this.image,
   });
 
-      static Users fromJson(Map<String,dynamic>json) => Users(
-        name:json['name'],
-        phonenumber:json['phonenumber'],
-        location:json['location'],
-        email:json['Email'],
-        image:json['image'],
+  static Users fromJson(Map<String, dynamic> json) => Users(
+        name: json['name'],
+        phonenumber: json['phonenumber'],
+        location: json['location'],
+        email: json['Email'],
       );
 
   Users copyWith({
@@ -35,7 +32,6 @@ class Users {
       name: name ?? this.name,
       phonenumber: phonenumber ?? this.phonenumber,
       email: email ?? this.email,
-      image: image ?? this.image,
     );
   }
 
@@ -45,7 +41,6 @@ class Users {
       'name': name,
       'phonenumber': phonenumber,
       'email': email,
-      'image': image,
     };
   }
 
@@ -55,7 +50,6 @@ class Users {
       name: map['name'],
       phonenumber: map['phonenumber'],
       email: map['email'],
-      image: map['image'],
     );
   }
 
@@ -65,27 +59,25 @@ class Users {
 
   @override
   String toString() {
-    return 'Users(location: $location, name: $name, phonenumber: $phonenumber, email: $email image: $image)';
+    return 'Users(location: $location, name: $name, phonenumber: $phonenumber, email: $email)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Users &&
-      other.location == location &&
-      other.name == name &&
-      other.phonenumber == phonenumber &&
-      other.email == email &&
-      other.image == image;
+        other.location == location &&
+        other.name == name &&
+        other.phonenumber == phonenumber &&
+        other.email == email;
   }
 
   @override
   int get hashCode {
     return location.hashCode ^
-      name.hashCode ^
-      phonenumber.hashCode ^
-      email.hashCode^
-      image.hashCode;
+        name.hashCode ^
+        phonenumber.hashCode ^
+        email.hashCode;
   }
 }

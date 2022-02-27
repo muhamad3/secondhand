@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/drawer.dart';
 import 'package:secondhand/classes/storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +20,10 @@ class _Profile extends State<Profile> {
   void initState() {
     super.initState();
     getemail();
-    getimage();
     getname();
     getlocation();
     getphonenumber();
+    downloadurl();
   }
 
   int _selectedIndex = 2;
@@ -39,7 +41,7 @@ class _Profile extends State<Profile> {
     }
   }
 
-  String? file;
+  String? image;
   String? name;
   String? email;
   String? location;
@@ -60,37 +62,51 @@ class _Profile extends State<Profile> {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData &&
                     post.email == email) {
-                  return Column(children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                      width: 300,
-                      height: 200,
-                      child: Image.network(
-                        snapshot.data ?? '',
-                        fit: BoxFit.cover,
+                  return Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    child: Column(children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        width: 300,
+                        height: 200,
+                        child: Image.network(
+                          snapshot.data ?? '',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text('name:${post.name}'),
-                          Text('price:${post.price}'),
-                        ]),
-                    Text(post.description ?? ' no description available'),
-                    ElevatedButton(
-                        onPressed: () {
-                          FirebaseFirestore.instance
-                              .collection('post')
-                              .doc(post.email!+post.name!)
-                              .delete();
-                        },
-                        child: Text('delete this post'))
-                  ]);
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('name:${post.name}'),
+                            Text('price:${post.price}'),
+                          ]),
+                      Text(post.description ?? ' no description available'),
+                      ElevatedButton(
+                          onPressed: () {
+                            FirebaseFirestore.instance
+                                .collection('post')
+                                .doc(post.email! + post.name!)
+                                .delete();
+                            FirebaseStorage.instance
+                                .ref('post/${post.name}${post.email}')
+                                .delete();
+                          },
+                          child: Text('delete this post'))
+                    ]),
+                  );
                 }
                 return Text('');
               }),
         ],
       );
+  downloadurl() async {
+    image = await firebase_storage.FirebaseStorage.
+    instance.ref('users/hama@gmail.com').getDownloadURL();
+    setState(() {
+      
+    });
+    print('===================================>$image');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,21 +123,15 @@ class _Profile extends State<Profile> {
                 SizedBox(
                   height: 25,
                 ),
-                file != null
-                    ? ClipOval(
-                        child: Image.file(
-                          File(file!),
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Image.network(
+                ClipOval(
+                  child: Image.network(
+                    image ??
                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                        width: 100,
-                        height: 100,
-                        alignment: Alignment.center,
-                      ),
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 Container(
                   child: Text(name ?? 'no name',
                       style: const TextStyle(fontSize: 16),
@@ -151,6 +161,13 @@ class _Profile extends State<Profile> {
                     textAlign: TextAlign.center,
                   ),
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                ),
+                Divider(
+                  color: Colors.black,
+                ),
+                Text(
+                  'your posts',
+                  style: TextStyle(fontSize: 20),
                 ),
                 Container(
                     margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
@@ -209,11 +226,6 @@ class _Profile extends State<Profile> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
     setState(() {});
-  }
-
-  getimage() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    file = preference.getString('image');
   }
 
   getlocation() async {
