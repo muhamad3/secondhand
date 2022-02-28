@@ -72,6 +72,14 @@ class _Posting extends State<Posting> {
   String? Price = '0';
   String? Descrioption;
   String? email;
+  String dropdownvalue = 'Tech';
+
+  var items = [
+    'Clothes',
+    'Tech',
+    'Car',
+    'Furniture',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +156,32 @@ class _Posting extends State<Posting> {
                     }),
                 Text('IQD'),
               ]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('Catagory :   '),
+                  DropdownButton(
+                    // Initial Value
+                    value: dropdownvalue,
+
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+
+                    // Array list of items
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                    },
+                  ),
+                ],
+              ),
               Container(
                 child: TextField(
                   controller: descrioption,
@@ -162,8 +196,8 @@ class _Posting extends State<Posting> {
                   Name = name?.value.text ?? 'no name avialable';
                   Price = price?.value.text ?? 'no price available';
                   if (_value == 1) {
-                    Price = "$Price"r" $";
-                  }else if(_value==2){
+                    Price = "$Price" r" $";
+                  } else if (_value == 2) {
                     Price = "$Price IQD";
                   }
                   Descrioption =
@@ -175,7 +209,8 @@ class _Posting extends State<Posting> {
                     'Name': Name,
                     'Price': Price,
                     'Description': Descrioption,
-                    'Email': email
+                    'Email': email,
+                    'catagory': dropdownvalue
                   });
 
                   uploadFile();

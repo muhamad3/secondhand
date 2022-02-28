@@ -29,7 +29,6 @@ class _HomeState extends State<Home> {
   String? phonenumber = '';
   String? location = '';
   String? image = '';
-  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -54,6 +53,8 @@ class _HomeState extends State<Home> {
   UploadTask? task;
   File? file;
   String? url;
+  int? select;
+  bool? type = true;
 
   Stream<List<Post>> readPosts() => FirebaseFirestore.instance
       .collection('post')
@@ -64,8 +65,6 @@ class _HomeState extends State<Home> {
   Widget buildpost(Post post) => GestureDetector(
       onTap: () async {
         await getuser(post.email ?? '');
-        setState(() {});
-
         opendialog();
       },
       child: Container(
@@ -74,37 +73,70 @@ class _HomeState extends State<Home> {
           FutureBuilder(
               future: storage.downloadurl('${post.name}${post.email}'),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (select == 1) {
+                  if (post.catagory == 'Tech') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else if (select == 2) {
+                  if (post.catagory == 'Car') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else if (select == 3) {
+                  if (post.catagory == 'Furniture') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                }else if (select == 4) {
+                  if (post.catagory == 'Clothes') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                }  else {
+                  type = true;
+                }
                 if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  return Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                    width: 300,
-                    height: 200,
-                    child: Image.network(
-                      snapshot.data ?? '',
-                      fit: BoxFit.cover,
-                    ),
+                    snapshot.hasData &&type!) {
+                  return Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        width: 300,
+                        height: 200,
+                        child: Image.network(
+                          snapshot.data ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('name:${post.name}'),
+                            Text('price:${post.price}'),
+                          ]),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text('email:${post.email}'),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        child: Text(
+                          post.description ?? ' no description available',
+                        ),
+                        margin: EdgeInsets.all(20),
+                      )
+                    ],
                   );
                 }
-                return CircularProgressIndicator();
+                return Text('');
               }),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Text('name:${post.name}'),
-            Text('price:${post.price}'),
-          ]),
-          SizedBox(
-            height: 5,
-          ),
-          Text('email:${post.email}'),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            child: Text(
-              post.description ?? ' no description available',
-            ),
-            margin: EdgeInsets.all(20),
-          )
         ],
       )));
 
@@ -116,6 +148,55 @@ class _HomeState extends State<Home> {
       ),
       body: Center(
         child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ChoiceChip(
+                selectedColor: Colors.cyan[500],
+                backgroundColor: Colors.cyan[300],
+                label: Text('Tech'),
+                selected: select == 1 ? true : false,
+                onSelected: (bool newValue) {
+                  setState(() {
+                    select = 1;
+                  });
+                },
+              ),
+              ChoiceChip(
+                selectedColor: Colors.cyan[500],
+                backgroundColor: Colors.cyan[300],
+                label: Text('Car'),
+                selected: select == 2 ? true : false,
+                onSelected: (bool newValue) {
+                  setState(() {
+                    select = 2;
+                  });
+                },
+              ),
+              ChoiceChip(
+                selectedColor: Colors.cyan[500],
+                backgroundColor: Colors.cyan[300],
+                label: Text('Furniture'),
+                selected: select == 3 ? true : false,
+                onSelected: (bool newValue) {
+                  setState(() {
+                    select = 3;
+                  });
+                },
+              ),
+              ChoiceChip(
+                selectedColor: Colors.cyan[500],
+                backgroundColor: Colors.cyan[300],
+                label: Text('Clothes'),
+                selected: select == 4 ? true : false,
+                onSelected: (bool newValue) {
+                  setState(() {
+                    select = 4;
+                  });
+                },
+              ),
+            ],
+          ),
           Expanded(
               child: StreamBuilder<List<Post>>(
             stream: readPosts(),
@@ -230,7 +311,6 @@ class _HomeState extends State<Home> {
                   ),
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                 ),
-               
               ],
             ),
           )));
