@@ -32,6 +32,6 @@ class Sharedpreference {
   static Future<void> isnotlogedin() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     preference.setBool('logedin', false);
-    print('the loged in is false');
+    print('logedin false');
   }
 }

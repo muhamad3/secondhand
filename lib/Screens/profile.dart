@@ -65,10 +65,10 @@ class _Profile extends State<Profile> {
                     snapshot.hasData &&
                     post.email == email) {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Column(children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
                         width: 300,
                         height: 200,
                         child: Image.network(
@@ -111,8 +111,7 @@ class _Profile extends State<Profile> {
       ),
       drawer: NavigationDrawerWidget(),
       body: Stack(children: <Widget>[
-        Center(
-          child: SingleChildScrollView(
+       SingleChildScrollView(
             child: Stack(children: <Widget>[
               Column(children: [
                 SizedBox(
@@ -165,8 +164,7 @@ class _Profile extends State<Profile> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Container(
-                    margin: EdgeInsets.fromLTRB(15, 20, 15, 15),
-                    height: 550,
+                    height: 450,
                     child: StreamBuilder<List<Post>>(
                       stream: readPosts(),
                       builder: (context, snapshot) {
@@ -188,7 +186,7 @@ class _Profile extends State<Profile> {
               ]),
             ]),
           ),
-        ),
+     
       ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -98,7 +98,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();
-    setState(() {});
+
   }
 
   getimage() async {
