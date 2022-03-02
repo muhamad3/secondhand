@@ -26,7 +26,6 @@ class _Login extends State<Login> {
   String? phonenumber = 'no phonenumber available';
   String? location = 'no location available';
 
-
   Stream<List<Users>> readUsers() => FirebaseFirestore.instance
       .collection('users')
       .snapshots()
@@ -37,8 +36,8 @@ class _Login extends State<Login> {
     var value =
         await FirebaseFirestore.instance.collection('users').doc(Email).get();
     Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
-    Sharedpreference.setuser(_user.name, _user.email,
-        _user.location, _user.phonenumber);
+    Sharedpreference.setuser(
+        _user.name, _user.email, _user.location, _user.phonenumber);
     return _user;
   }
 
@@ -73,6 +72,8 @@ class _Login extends State<Login> {
         ElevatedButton(
           onPressed: () async {
             Email = email.value.text;
+            Email = Email.trim();
+            Email = Email.toLowerCase();
             Password = password.value.text;
             getuser();
             loginWithEmailAndPassword(Email, Password);
@@ -86,15 +87,19 @@ class _Login extends State<Login> {
         SizedBox(height: 20),
         TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/createacc');
+              Navigator.popAndPushNamed(context, '/createacc');
             },
-            child: const Text('don' 't have an account?'))
+            child: const Text("don't have an account?")),
+        TextButton(
+            onPressed: () {
+              Navigator.popAndPushNamed(context, '/forgotpassword');
+            },
+            child: const Text("Forgot Password?"))
       ],
     ));
   }
 
-  loginWithEmailAndPassword(
-      String email, String password) async {
+  loginWithEmailAndPassword(String email, String password) async {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) => Navigator.popAndPushNamed(context, '/home'));

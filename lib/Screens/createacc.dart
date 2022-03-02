@@ -128,8 +128,7 @@ class _CreateaccState extends State<Createacc> {
                 'email': Email,
                 'name': username,
                 'location': loc,
-                'phonenumber': phonenumber,
-                'image': file?.path
+                'phonenumber': phonenumber
               });
 
               Sharedpreference.setuser(username, Email, loc, phonenumber);

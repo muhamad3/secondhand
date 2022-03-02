@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/Home.dart';
+import 'package:secondhand/Screens/forgotpassword.dart';
 import 'package:secondhand/Screens/createacc.dart';
 import 'package:secondhand/Screens/onboardingstate.dart';
 import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) => print('firebase initialized'));
@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         '/home': (context) => const Home(),
         '/post': (context) => const Posting(),
         '/profile': (context) => const Profile(),
+        '/forgotpassword': (context) =>  Forgotpassword(),
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:secondhand/classes/Post.dart';
@@ -23,9 +22,7 @@ class _Profile extends State<Profile> {
     getname();
     getlocation();
     getphonenumber();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   int _selectedIndex = 2;
@@ -102,7 +99,6 @@ class _Profile extends State<Profile> {
         ],
       );
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,82 +107,81 @@ class _Profile extends State<Profile> {
       ),
       drawer: NavigationDrawerWidget(),
       body: Stack(children: <Widget>[
-       SingleChildScrollView(
-            child: Stack(children: <Widget>[
-              Column(children: [
-                SizedBox(
-                  height: 25,
+        SingleChildScrollView(
+          child: Stack(children: <Widget>[
+            Column(children: [
+              SizedBox(
+                height: 25,
+              ),
+              ClipOval(
+                child: Image.network(
+                  image ??
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
                 ),
-                ClipOval(
-                  child: Image.network(
-                    image ??
-                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
+              ),
+              Container(
+                child: Text(name ?? 'no name',
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'location: lives in $location ',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
-                Container(
-                  child: Text(name ?? 'no name',
-                      style: const TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center),
-                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'Email: $email',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
-                Container(
-                  child: Text(
-                    'location: lives in $location ',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'Phone number: $phonenumber',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
-                Container(
-                  child: Text(
-                    'Email: $email',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                ),
-                Container(
-                  child: Text(
-                    'Phone number: $phonenumber',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Text(
-                  'your posts',
-                  style: TextStyle(fontSize: 20),
-                ),
-                Container(
-                    height: 450,
-                    child: StreamBuilder<List<Post>>(
-                      stream: readPosts(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return const Text('erorr');
-                        }
-                        if (snapshot.hasData) {
-                          final post = snapshot.data!;
-                          return ListView(
-                            children: post.map(buildpost).toList(),
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ))
-              ]),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              Text(
+                'your posts',
+                style: TextStyle(fontSize: 20),
+              ),
+              Container(
+                  height: 450,
+                  child: StreamBuilder<List<Post>>(
+                    stream: readPosts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('erorr');
+                      }
+                      if (snapshot.hasData) {
+                        final post = snapshot.data!;
+                        return ListView(
+                          children: post.map(buildpost).toList(),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ))
             ]),
-          ),
-     
+          ]),
+        ),
       ]),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -218,8 +213,9 @@ class _Profile extends State<Profile> {
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
-        image = await firebase_storage.FirebaseStorage
-    .instance.ref('users/$email').getDownloadURL();
+    image = await firebase_storage.FirebaseStorage.instance
+        .ref('users/$email')
+        .getDownloadURL();
     setState(() {});
   }
 
@@ -232,5 +228,4 @@ class _Profile extends State<Profile> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     phonenumber = preference.getString('phonenumber');
   }
-
 }
