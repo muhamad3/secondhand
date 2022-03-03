@@ -48,6 +48,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   multi_select_flutter: ^4.0.0
   email_validator: ^2.0.1
+  curved_navigation_bar: ^1.0.3
 
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -20,7 +21,23 @@ class _Posting extends State<Posting> {
     super.initState();
     getemail();
   }
-
+    final item = <Widget>[
+    Icon(
+      Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.add_box,
+      color: Colors.white,
+      size: 30,
+    ),
+    Icon(
+      Icons.person,
+      size: 20,
+      color: Colors.white,
+    ),
+  ];
   int _selectedIndex = 1;
   int _value = 0;
 
@@ -83,8 +100,8 @@ class _Posting extends State<Posting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('posting'),
+      appBar: AppBar(centerTitle: true,backgroundColor: Colors.cyan,
+        title: const Text('Posting',style: TextStyle(color: Colors.white),),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -228,23 +245,12 @@ class _Posting extends State<Posting> {
           ]),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_outlined),
-            label: 'posting',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan,
+          bottomNavigationBar: CurvedNavigationBar(
+        height: 55,
+        items: item,
+        backgroundColor: Colors.transparent,
+        color: Colors.cyan,
+        index: _selectedIndex,
         onTap: _onItemTapped,
       ),
     );

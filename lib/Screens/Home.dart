@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../classes/Users.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -23,6 +24,23 @@ class _HomeState extends State<Home> {
   }
 
   int _selectedIndex = 0;
+  final items = <Widget>[
+    Icon(
+      Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.add_box,
+      color: Colors.white,
+      size: 30,
+    ),
+    Icon(
+      Icons.person,
+      size: 20,
+      color: Colors.white,
+    ),
+  ];
   final Storage storage = Storage();
   String? email;
   String? name = '';
@@ -91,17 +109,18 @@ class _HomeState extends State<Home> {
                   } else {
                     type = false;
                   }
-                }else if (select == 4) {
+                } else if (select == 4) {
                   if (post.catagory == 'Clothes') {
                     type = true;
                   } else {
                     type = false;
                   }
-                }  else {
+                } else {
                   type = true;
                 }
                 if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData &&type!) {
+                    snapshot.hasData &&
+                    type!) {
                   return Column(
                     children: [
                       Container(
@@ -144,7 +163,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('home'),
+        centerTitle: true,backgroundColor: Colors.cyan,
+        title: const Text('Home',style: TextStyle(color: Colors.white),),
       ),
       body: Center(
         child: Column(children: [
@@ -154,7 +174,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Tech'),
+                label: Text('Tech',style: TextStyle(color: Colors.white)),
                 selected: select == 1 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -165,7 +185,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Car'),
+                label: Text('Car',style: TextStyle(color: Colors.white)),
                 selected: select == 2 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -176,7 +196,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Furniture'),
+                label: Text('Furniture',style: TextStyle(color: Colors.white)),
                 selected: select == 3 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -187,7 +207,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Clothes'),
+                label: Text('Clothes',style: TextStyle(color: Colors.white)),
                 selected: select == 4 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -218,23 +238,12 @@ class _HomeState extends State<Home> {
           ))
         ]),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_outlined),
-            label: 'posting',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan,
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 55,
+        items: items,
+        backgroundColor: Colors.transparent,
+        color: Colors.cyan,
+        index: _selectedIndex,
         onTap: _onItemTapped,
       ),
     );

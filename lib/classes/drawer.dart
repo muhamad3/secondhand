@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
@@ -58,6 +57,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                 onclick: () {
                   Sharedpreference.setuser('', '', '', '');
                   Sharedpreference.isnotlogedin();
+                  Navigator.pop(context);
                   Navigator.popAndPushNamed(context, '/login');
                 }),
           ],
@@ -97,13 +97,8 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();
-        setState(() {
-          
-        });
-
+    setState(() {});
   }
-
- 
 
   getphonenumber() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();

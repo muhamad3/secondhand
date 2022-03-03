@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/drawer.dart';
@@ -27,6 +28,23 @@ class _Profile extends State<Profile> {
 
   int _selectedIndex = 2;
   String? test;
+    final items = <Widget>[
+    Icon(
+      Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.add_box,
+      color: Colors.white,
+      size: 30,
+    ),
+    Icon(
+      Icons.person,
+      size: 20,
+      color: Colors.white,
+    ),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -102,8 +120,8 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('profile'),
+      appBar: AppBar(centerTitle: true,backgroundColor: Colors.cyan,
+        title: const Text('Profile',style: TextStyle(color: Colors.white),),
       ),
       drawer: NavigationDrawerWidget(),
       body: Stack(children: <Widget>[
@@ -183,23 +201,12 @@ class _Profile extends State<Profile> {
           ]),
         ),
       ]),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_outlined),
-            label: 'posting',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan,
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 55,
+        items: items,
+        backgroundColor: Colors.transparent,
+        color: Colors.cyan,
+        index: _selectedIndex,
         onTap: _onItemTapped,
       ),
     );
