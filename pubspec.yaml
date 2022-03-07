@@ -49,6 +49,8 @@ dependencies:
   multi_select_flutter: ^4.0.0
   email_validator: ^2.0.1
   curved_navigation_bar: ^1.0.3
+  chat_bubbles: ^1.2.0
+  intl: ^0.17.0
 
 
 dev_dependencies:

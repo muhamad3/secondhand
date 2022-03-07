@@ -85,16 +85,22 @@ class _Login extends State<Login> {
           ),
         ),
         SizedBox(height: 20),
-        TextButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, '/createacc');
-            },
-            child: const Text("don't have an account?")),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("don't have an account?"),
+            TextButton(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/createacc');
+                },
+                child: const Text("create one",style: TextStyle(color: Colors.cyan))),
+          ],
+        ),
         TextButton(
             onPressed: () {
               Navigator.popAndPushNamed(context, '/forgotpassword');
             },
-            child: const Text("Forgot Password?"))
+            child: const Text("Forgot Password?",style: TextStyle(color: Colors.cyan),))
       ],
     ));
   }

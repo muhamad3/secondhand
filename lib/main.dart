@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/Home.dart';
+import 'package:secondhand/Screens/chatscren.dart';
 import 'package:secondhand/Screens/forgotpassword.dart';
 import 'package:secondhand/Screens/createacc.dart';
 import 'package:secondhand/Screens/onboardingstate.dart';
@@ -65,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         '/post': (context) => const Posting(),
         '/profile': (context) => const Profile(),
         '/forgotpassword': (context) =>  Forgotpassword(),
+        '/chat': (context) =>  ChatScreen(),
       },
     );
   }

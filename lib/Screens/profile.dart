@@ -26,7 +26,7 @@ class _Profile extends State<Profile> {
     setState(() {});
   }
 
-  int _selectedIndex = 2;
+  int _selectedIndex = 3;
   String? test;
     final items = <Widget>[
     Icon(
@@ -36,6 +36,11 @@ class _Profile extends State<Profile> {
     ),
     Icon(
       Icons.add_box,
+      color: Colors.white,
+      size: 30,
+    ),
+    Icon(
+      Icons.chat,
       color: Colors.white,
       size: 30,
     ),
@@ -55,6 +60,9 @@ class _Profile extends State<Profile> {
     }
     if (_selectedIndex == 1) {
       Navigator.popAndPushNamed(context, '/post');
+    }
+    if (_selectedIndex == 2) {
+      Navigator.popAndPushNamed(context, '/chat');
     }
   }
 

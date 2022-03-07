@@ -21,7 +21,9 @@ class _ForgotpasswordState extends State<Forgotpassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.cyan,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -40,22 +42,40 @@ class _ForgotpasswordState extends State<Forgotpassword> {
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
           ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+              ),
               onPressed: () {
+                opendialog();
                 Resetpassword();
               },
               child: Text('Reset Password')),
-          ElevatedButton(
+          TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+              ),
               onPressed: () {
+                
                 Navigator.popAndPushNamed(context, '/login');
               },
-              child: Text('go back'))
+              child: Text('go back', style: TextStyle(color: Colors.white)))
         ],
       ),
     );
   }
 
+  Future opendialog() => showDialog(
+      context: this.context,
+      builder: (context) => AlertDialog(
+              content: Container(
+            width: 300,
+            height: 100,
+            child: Text(
+                'an email has been sent to this account ${emailcontroller.text}'),
+          )));
+
   Future Resetpassword() async {
-    await FirebaseAuth.instance
+  await FirebaseAuth.instance
         .sendPasswordResetEmail(email: emailcontroller.text.trim());
     Navigator.popAndPushNamed(context, '/login');
   }

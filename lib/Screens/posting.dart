@@ -33,6 +33,11 @@ class _Posting extends State<Posting> {
       size: 30,
     ),
     Icon(
+      Icons.chat,
+      color: Colors.white,
+      size: 30,
+    ),
+    Icon(
       Icons.person,
       size: 20,
       color: Colors.white,
@@ -49,6 +54,9 @@ class _Posting extends State<Posting> {
       Navigator.popAndPushNamed(this.context, '/home');
     }
     if (_selectedIndex == 2) {
+      Navigator.popAndPushNamed(this.context, '/chat');
+    }
+    if (_selectedIndex == 3) {
       Navigator.popAndPushNamed(this.context, '/profile');
     }
   }
