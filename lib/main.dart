@@ -9,6 +9,7 @@ import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
+import 'Screens/sellersprofile.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) => print('firebase initialized'));
@@ -65,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         '/home': (context) => const Home(),
         '/post': (context) => const Posting(),
         '/profile': (context) => const Profile(),
+        '/sellersprofile': (context) =>  SellersProfile(Email: 'matin@gmail.com',),
         '/forgotpassword': (context) =>  Forgotpassword(),
         '/chat': (context) =>  ChatScreen(),
       },

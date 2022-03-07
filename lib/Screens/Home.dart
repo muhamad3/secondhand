@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../classes/Users.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -18,11 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  void initState() {
-    super.initState();
-    getemail();
-  }
-
   int _selectedIndex = 0;
   final items = <Widget>[
     Icon(
@@ -90,8 +85,10 @@ class _HomeState extends State<Home> {
 
   Widget buildpost(Post post) => GestureDetector(
       onTap: () async {
-        await getuser(post.email ?? '');
-        opendialog();
+        // await getuser(post.email ?? '');
+        // opendialog();
+        Sharedpreference.sellersemail(post.email);
+        Navigator.pushNamed(context, '/sellersprofile');
       },
       child: Container(
           child: Column(
@@ -171,8 +168,12 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,backgroundColor: Colors.cyan,
-        title: const Text('Home',style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        backgroundColor: Colors.cyan,
+        title: const Text(
+          'Home',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
         child: Column(children: [
@@ -182,7 +183,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Tech',style: TextStyle(color: Colors.white)),
+                label: Text('Tech', style: TextStyle(color: Colors.white)),
                 selected: select == 1 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -193,7 +194,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Car',style: TextStyle(color: Colors.white)),
+                label: Text('Car', style: TextStyle(color: Colors.white)),
                 selected: select == 2 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -204,7 +205,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Furniture',style: TextStyle(color: Colors.white)),
+                label: Text('Furniture', style: TextStyle(color: Colors.white)),
                 selected: select == 3 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -215,7 +216,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Clothes',style: TextStyle(color: Colors.white)),
+                label: Text('Clothes', style: TextStyle(color: Colors.white)),
                 selected: select == 4 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -257,12 +258,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  getemail() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    email = preference.getString('email');
-    setState(() {});
-  }
-
   getuser(String email) async {
     var value =
         await FirebaseFirestore.instance.collection('users').doc(email).get();
@@ -270,6 +265,7 @@ class _HomeState extends State<Home> {
     name = _user.name;
     location = _user.location;
     phonenumber = _user.phonenumber;
+    this.email = _user.email!;
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();

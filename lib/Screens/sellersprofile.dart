@@ -1,0 +1,183 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secondhand/classes/Post.dart';
+import 'package:secondhand/classes/storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:secondhand/classes/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+
+class SellersProfile extends StatefulWidget {
+  SellersProfile({Key? key, required String Email}) : super(key: key);
+
+  @override
+  _SellersProfile createState() => _SellersProfile();
+}
+
+class _SellersProfile extends State<SellersProfile> {
+  @override
+  void initState() {
+    super.initState();
+    getuser();
+    setState(() {
+      
+    });
+  }
+
+  String? image;
+  String? name;
+  String? email;
+  String? location;
+  String? phonenumber;
+  final Storage storage = Storage();
+
+  Future<Users> getuser() async {
+   final SharedPreferences preference = await SharedPreferences.getInstance();
+    email = preference.getString('sellersemail');
+    image = await firebase_storage.FirebaseStorage.instance
+        .ref('users/$email')
+        .getDownloadURL();
+    var value =
+        await FirebaseFirestore.instance.collection('users').doc(email).get();
+    Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
+    name = _user.name;
+    phonenumber = _user.phonenumber;
+    location= _user.location;
+    setState(() {
+      
+    });
+    return _user;
+  }
+
+  Stream<List<Post>> readPosts() => FirebaseFirestore.instance
+      .collection('post')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
+
+  Widget buildpost(Post post) => Column(
+        children: [
+          FutureBuilder(
+              future: storage.downloadurl('${post.name}${post.email}'),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData &&
+                    post.email == email) {
+                  return Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    child: Column(children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        width: 300,
+                        height: 200,
+                        child: Image.network(
+                          snapshot.data ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('name:${post.name}'),
+                            Text('price:${post.price}'),
+                          ]),
+                      Text(post.description ?? ' no description available'),
+                    ]),
+                  );
+                }
+                return Text('');
+              }),
+        ],
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.cyan,
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Stack(children: <Widget>[
+        SingleChildScrollView(
+          child: Stack(children: <Widget>[
+            Column(children: [
+              SizedBox(
+                height: 25,
+              ),
+              ClipOval(
+                child: Image.network(
+                  image ??
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                child: Text(name ?? 'no name',
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'location: lives in $location ',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'Email: $email',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Container(
+                child: Text(
+                  'Phone number: $phonenumber',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              Text(
+                'your posts',
+                style: TextStyle(fontSize: 20),
+              ),
+              Container(
+                  height: 450,
+                  child: StreamBuilder<List<Post>>(
+                    stream: readPosts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('erorr');
+                      }
+                      if (snapshot.hasData) {
+                        final post = snapshot.data!;
+                        return ListView(
+                          children: post.map(buildpost).toList(),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ))
+            ]),
+          ]),
+        ),
+      ]),
+    );
+  }
+
+}
