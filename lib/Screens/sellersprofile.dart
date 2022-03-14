@@ -232,7 +232,7 @@ class _SellersProfile extends State<SellersProfile> {
                             const Size.fromWidth(180)),
                       ),
                     )
-                  : const Text(''),
+                  : const  SizedBox.shrink(),
               const Divider(
                 color: Colors.black,
               ),

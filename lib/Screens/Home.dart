@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
                 ],
               );
             }
-            return const Text('');
+            return const SizedBox.shrink();
           }),
         ],
       ));

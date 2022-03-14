@@ -103,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   color: Colors.white, fontSize: 16),
                             );
                           }
-                          return const Text('');
+                           return const SizedBox.shrink();
                         });
                   }
 

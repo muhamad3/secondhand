@@ -115,7 +115,7 @@ class _ChatsState extends State<Chats> {
                     ),
                   );
                 }
-                return const Text('');
+                 return const SizedBox.shrink();
               }),
         ],
       );
