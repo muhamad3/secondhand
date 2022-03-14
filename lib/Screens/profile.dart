@@ -118,7 +118,7 @@ class _Profile extends State<Profile> {
                     ]),
                   );
                 }
-                return const Text('');
+                return const SizedBox.shrink();
               }),
         ],
       );

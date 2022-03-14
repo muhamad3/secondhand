@@ -121,7 +121,7 @@ class _SellersProfile extends State<SellersProfile> {
                     ]),
                   );
                 }
-                return const Text('');
+                return const SizedBox.shrink();
               }),
         ],
       );
