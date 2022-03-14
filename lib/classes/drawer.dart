@@ -93,11 +93,12 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
 
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-    setState(() {});
+
     email = preference.getString('email');
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();
+    setState(() {});
   }
 
   getphonenumber() async {

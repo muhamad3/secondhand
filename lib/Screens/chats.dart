@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/chatsdatamodel.dart';
+import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,10 +21,10 @@ class _ChatsState extends State<Chats> {
     setState(() {});
   }
 
-  String? email;
+  String? useremail;
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-    email = preference.getString('email');
+    useremail = preference.getString('email');
     setState(() {});
   }
 
@@ -71,8 +72,8 @@ class _ChatsState extends State<Chats> {
 
   Stream<List<Chatsdata>> readPosts() => FirebaseFirestore.instance
       .collection('chats')
-      .doc(email)
-      .collection("$email's chats")
+      .doc(useremail)
+      .collection("$useremail's chats")
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Chatsdata.fromJson(doc.data())).toList());
@@ -85,7 +86,19 @@ class _ChatsState extends State<Chats> {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
                   return GestureDetector(
-                    onTap: (() {
+                    onTap: (() async {
+                      Sharedpreference.sellersemail(chatsdata.email);
+                      final snap = await FirebaseFirestore.instance
+                          .collection('messeges')
+                          .doc(chatsdata.email)
+                          .collection('${chatsdata.email} to $useremail')
+                          .doc(useremail)
+                          .get();
+                      if (snap.exists) {
+                        Sharedpreference.revrsetalked(true);
+                      } else {
+                        Sharedpreference.revrsetalked(false);
+                      }
                       Navigator.pushNamed(context, '/chat');
                     }),
                     child: ListTile(
