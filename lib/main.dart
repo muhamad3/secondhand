@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:secondhand/Screens/Home.dart';
+import 'package:secondhand/Screens/home.dart';
 import 'package:secondhand/Screens/chats.dart';
-import 'package:secondhand/Screens/chatscren.dart';
+import 'package:secondhand/Screens/chatscreen.dart';
 import 'package:secondhand/Screens/forgotpassword.dart';
 import 'package:secondhand/Screens/createacc.dart';
 import 'package:secondhand/Screens/onboardingstate.dart';
@@ -13,7 +13,7 @@ import 'Screens/Login.dart';
 import 'Screens/sellersprofile.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => print('firebase initialized'));
+  await Firebase.initializeApp();
 
   runApp(const MyApp());
 }

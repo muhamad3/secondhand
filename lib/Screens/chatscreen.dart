@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             if (usersemail == _emails[index]) {
                               return BubbleSpecialThree(
                                 isSender: true,
-                                text: '${_users[index]}$formattedTime',
+                                text: '${_users[index]}  $formattedTime',
                                 color: Colors.cyan,
                                 tail: true,
                                 textStyle: const TextStyle(
@@ -112,15 +112,20 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-          Expanded(
+          SizedBox(
+            height:60 ,
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: msg,
+                    decoration:const InputDecoration(
+                      hintText: 'Type your messege here'
+                    ),
                   ),
                 ),
-                Expanded(
+                SizedBox(
+                  width:60,
                   child: ElevatedButton(
                     onPressed: () async {
                       String messege = msg.value.text.trim();
@@ -149,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                       }
                     },
-                    child: const Text("send"),
+                    child: const Icon(Icons.send),
                   ),
                 ),
               ],

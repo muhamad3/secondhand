@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +34,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
               controller: emailcontroller,
               textInputAction: TextInputAction.done,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), hintText: 'example@gmail.com'),
               validator: (email) =>
                   email != null && !EmailValidator.validate(email)
@@ -49,7 +51,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 opendialog();
                 Resetpassword();
               },
-              child: Text('Reset Password')),
+              child: const Text('Reset Password')),
           TextButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
@@ -58,14 +60,14 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 
                 Navigator.popAndPushNamed(context, '/login');
               },
-              child: Text('go back', style: TextStyle(color: Colors.white)))
+              child: const Text('go back', style: TextStyle(color: Colors.white)))
         ],
       ),
     );
   }
 
   Future opendialog() => showDialog(
-      context: this.context,
+      context: context,
       builder: (context) => AlertDialog(
               content: Container(
             width: 300,
@@ -74,6 +76,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 'an email has been sent to this account ${emailcontroller.text}'),
           )));
 
+  // ignore: non_constant_identifier_names
   Future Resetpassword() async {
   await FirebaseAuth.instance
         .sendPasswordResetEmail(email: emailcontroller.text.trim());

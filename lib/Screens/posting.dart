@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +24,22 @@ class _Posting extends State<Posting> {
     getemail();
   }
     final item = <Widget>[
-    Icon(
+    const Icon(
       Icons.home,
       size: 30,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.add_box,
       color: Colors.white,
       size: 30,
     ),
-    Icon(
+    const Icon(
       Icons.chat,
       color: Colors.white,
       size: 30,
     ),
-    Icon(
+    const Icon(
       Icons.person,
       size: 20,
       color: Colors.white,
@@ -51,13 +53,13 @@ class _Posting extends State<Posting> {
       _selectedIndex = index;
     });
     if (_selectedIndex == 0) {
-      Navigator.popAndPushNamed(this.context, '/home');
+      Navigator.popAndPushNamed(context, '/home');
     }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(this.context, '/chat');
+      Navigator.popAndPushNamed(context, '/chat');
     }
     if (_selectedIndex == 3) {
-      Navigator.popAndPushNamed(this.context, '/profile');
+      Navigator.popAndPushNamed(context, '/profile');
     }
   }
 
@@ -161,7 +163,7 @@ class _Posting extends State<Posting> {
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               ),
               Row(children: [
-                Text('       Currency :'),
+                const Text('       Currency :'),
                 Radio(
                     value: 1,
                     groupValue: _value,
@@ -170,7 +172,7 @@ class _Posting extends State<Posting> {
                         _value = int.parse(value.toString());
                       });
                     }),
-                Text('USD'),
+                const Text('USD'),
                 Radio(
                     value: 2,
                     groupValue: _value,
@@ -179,12 +181,12 @@ class _Posting extends State<Posting> {
                         _value = int.parse(value.toString());
                       });
                     }),
-                Text('IQD'),
+                const Text('IQD'),
               ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('Catagory :   '),
+                  const Text('Catagory :   '),
                   DropdownButton(
                     // Initial Value
                     value: dropdownvalue,

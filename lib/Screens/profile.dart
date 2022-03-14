@@ -19,32 +19,30 @@ class _Profile extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    // to get email and name and location and phone number and image of user
     getemail();
-    getname();
-    getlocation();
-    getphonenumber();
     setState(() {});
   }
 
   int _selectedIndex = 3;
   String? test;
     final items = <Widget>[
-    Icon(
+    const Icon(
       Icons.home,
       size: 30,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.add_box,
       color: Colors.white,
       size: 30,
     ),
-    Icon(
+    const Icon(
       Icons.chat,
       color: Colors.white,
       size: 30,
     ),
-    Icon(
+    const Icon(
       Icons.person,
       size: 20,
       color: Colors.white,
@@ -88,10 +86,10 @@ class _Profile extends State<Profile> {
                     snapshot.hasData &&
                     post.email == email) {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Column(children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                         width: 300,
                         height: 200,
                         child: Image.network(
@@ -105,7 +103,7 @@ class _Profile extends State<Profile> {
                             Text('name:${post.name}'),
                             Text('price:${post.price}'),
                           ]),
-                      Text(post.description ?? ' no description available'),
+                      Text(post.description ?? ''),
                       ElevatedButton(
                           onPressed: () {
                             FirebaseFirestore.instance
@@ -116,11 +114,11 @@ class _Profile extends State<Profile> {
                                 .ref('post/${post.name}${post.email}')
                                 .delete();
                           },
-                          child: Text('delete this post'))
+                          child: const Text('delete this post'))
                     ]),
                   );
                 }
-                return Text('');
+                return const Text('');
               }),
         ],
       );
@@ -131,12 +129,12 @@ class _Profile extends State<Profile> {
       appBar: AppBar(centerTitle: true,backgroundColor: Colors.cyan,
         title: const Text('Profile',style: TextStyle(color: Colors.white),),
       ),
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       body: Stack(children: <Widget>[
         SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               ClipOval(
@@ -149,15 +147,15 @@ class _Profile extends State<Profile> {
                 ),
               ),
               Container(
-                child: Text(name ?? 'no name',
+                child: Text(name ?? 'name',
                     style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.center),
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
               ),
               Container(
                 child: Text(
-                  'location: lives in $location ',
-                  style: TextStyle(fontSize: 16),
+                  'location: lives in $location',
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -165,7 +163,7 @@ class _Profile extends State<Profile> {
               Container(
                 child: Text(
                   'Email: $email',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -173,19 +171,19 @@ class _Profile extends State<Profile> {
               Container(
                 child: Text(
                   'Phone number: $phonenumber',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
-              Divider(
+              const Divider(
                 color: Colors.black,
               ),
-              Text(
+              const Text(
                 'your posts',
-                style: TextStyle(fontSize: 20),
+                style:  TextStyle(fontSize: 20),
               ),
-              Container(
+              SizedBox(
                   height: 450,
                   child: StreamBuilder<List<Post>>(
                     stream: readPosts(),
@@ -220,27 +218,17 @@ class _Profile extends State<Profile> {
     );
   }
 
-  getname() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    name = preference.getString('name');
-  }
 
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     email = preference.getString('email');
+    name = preference.getString('name');
+    phonenumber = preference.getString('phonenumber');
+    location = preference.getString('location');
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();
     setState(() {});
   }
 
-  getlocation() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    location = preference.getString('location');
-  }
-
-  getphonenumber() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
-    phonenumber = preference.getString('phonenumber');
-  }
 }

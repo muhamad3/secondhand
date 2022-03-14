@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -83,8 +85,8 @@ class _CreateaccState extends State<Createacc> {
           Container(
             child: TextField(
               controller: email,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'example@gmail.com'),
+              decoration: const InputDecoration(
+                  border:  OutlineInputBorder(), hintText: 'example@gmail.com'),
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
@@ -180,7 +182,5 @@ class _CreateaccState extends State<Createacc> {
           urldownload = value;
           debugPrint(urldownload);
         }));
-
-    print('Download-Link: $urldownload');
   }
 }

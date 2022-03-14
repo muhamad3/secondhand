@@ -6,9 +6,6 @@ class Storage {
 
   Future<firebase_storage.ListResult> listfile() async {
     firebase_storage.ListResult result = await storage.ref('post').listAll();
-    result.items.forEach((firebase_storage.Reference ref) {
-      print('found files $ref');
-    });
     return result;
   }
 

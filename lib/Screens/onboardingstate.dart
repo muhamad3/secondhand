@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,22 +50,22 @@ class _Login extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(Icons.person, size: 90, color: Colors.cyan),
+        const Icon(Icons.person, size: 90, color: Colors.cyan),
         const SizedBox(
           height: 20,
         ),
         Container(
           child: TextField(
             controller: email,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(), hintText: 'example@gmail.com'),
+            decoration: const InputDecoration(
+                border:  OutlineInputBorder(), hintText: 'example@gmail.com'),
           ),
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         ),
         Container(
           child: TextField(
             controller: password,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), hintText: '******'),
             obscureText: true,
           ),
@@ -84,11 +86,11 @@ class _Login extends State<Login> {
             backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("don't have an account?"),
+            const Text("don't have an account?"),
             TextButton(
                 onPressed: () {
                   Navigator.popAndPushNamed(context, '/createacc');
