@@ -20,22 +20,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   final items = <Widget>[
-    Icon(
+    const Icon(
       Icons.home,
       size: 30,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.add_box,
       color: Colors.white,
       size: 30,
     ),
-    Icon(
+    const Icon(
       Icons.chat,
       size: 20,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.person,
       size: 20,
       color: Colors.white,
@@ -53,13 +53,13 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
     if (_selectedIndex == 1) {
-      Navigator.popAndPushNamed(this.context, '/post');
+      Navigator.popAndPushNamed(context, '/post');
     }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(this.context, '/chat');
+      Navigator.popAndPushNamed(context, '/chats');
     }
     if (_selectedIndex == 3) {
-      Navigator.popAndPushNamed(this.context, '/profile');
+      Navigator.popAndPushNamed(context, '/profile');
     }
   }
 
@@ -85,84 +85,81 @@ class _HomeState extends State<Home> {
 
   Widget buildpost(Post post) => GestureDetector(
       onTap: () async {
-        // await getuser(post.email ?? '');
-        // opendialog();
         Sharedpreference.sellersemail(post.email);
         Navigator.pushNamed(context, '/sellersprofile');
       },
-      child: Container(
-          child: Column(
+      child: Column(
         children: [
-          FutureBuilder(
-              future: storage.downloadurl('${post.name}${post.email}'),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (select == 1) {
-                  if (post.catagory == 'Tech') {
-                    type = true;
-                  } else {
-                    type = false;
-                  }
-                } else if (select == 2) {
-                  if (post.catagory == 'Car') {
-                    type = true;
-                  } else {
-                    type = false;
-                  }
-                } else if (select == 3) {
-                  if (post.catagory == 'Furniture') {
-                    type = true;
-                  } else {
-                    type = false;
-                  }
-                } else if (select == 4) {
-                  if (post.catagory == 'Clothes') {
-                    type = true;
-                  } else {
-                    type = false;
-                  }
-                } else {
-                  type = true;
-                }
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData &&
-                    type!) {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                        width: 300,
-                        height: 200,
-                        child: Image.network(
-                          snapshot.data ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text('name:${post.name}'),
-                            Text('price:${post.price}'),
-                          ]),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text('email:${post.email}'),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        child: Text(
-                          post.description ?? ' no description available',
-                        ),
-                        margin: EdgeInsets.all(20),
-                      )
-                    ],
-                  );
-                }
-                return Text('');
-              }),
+      FutureBuilder(
+          future: storage.downloadurl('${post.name}${post.email}'),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (select == 1) {
+              if (post.catagory == 'Tech') {
+                type = true;
+              } else {
+                type = false;
+              }
+            } else if (select == 2) {
+              if (post.catagory == 'Car') {
+                type = true;
+              } else {
+                type = false;
+              }
+            } else if (select == 3) {
+              if (post.catagory == 'Furniture') {
+                type = true;
+              } else {
+                type = false;
+              }
+            } else if (select == 4) {
+              if (post.catagory == 'Clothes') {
+                type = true;
+              } else {
+                type = false;
+              }
+            } else {
+              type = true;
+            }
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData &&
+                type!) {
+              return Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    width: 300,
+                    height: 200,
+                    child: Image.network(
+                      snapshot.data ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('name:${post.name}'),
+                        Text('price:${post.price}'),
+                      ]),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text('email:${post.email}'),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: Text(
+                      post.description ?? ' no description available',
+                    ),
+                    margin: const EdgeInsets.all(20),
+                  )
+                ],
+              );
+            }
+            return const Text('');
+          }),
         ],
-      )));
+      ));
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +180,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Tech', style: TextStyle(color: Colors.white)),
+                label: const Text('Tech', style: TextStyle(color: Colors.white)),
                 selected: select == 1 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -194,7 +191,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Car', style: TextStyle(color: Colors.white)),
+                label: const Text('Car', style: TextStyle(color: Colors.white)),
                 selected: select == 2 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -205,7 +202,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Furniture', style: TextStyle(color: Colors.white)),
+                label: const Text('Furniture', style:  TextStyle(color: Colors.white)),
                 selected: select == 3 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -216,7 +213,7 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: Text('Clothes', style: TextStyle(color: Colors.white)),
+                label: const Text('Clothes', style:  TextStyle(color: Colors.white)),
                 selected: select == 4 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -272,59 +269,4 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  Future opendialog() => showDialog(
-      context: this.context,
-      builder: (context) => AlertDialog(
-          title: const Text(
-            'Sellers profile',
-            textAlign: TextAlign.center,
-          ),
-          content: Container(
-            color: Colors.grey[300],
-            width: 300,
-            height: 400,
-            child: Column(
-              children: [
-                ClipOval(
-                  child: Image.network(
-                    image ??
-                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  child: Text(name ?? 'no name',
-                      style: const TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center),
-                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-                ),
-                Container(
-                  child: Text(
-                    'location: lives in $location ',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                ),
-                Container(
-                  child: Text(
-                    'Email: $email',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                ),
-                Container(
-                  child: Text(
-                    'Phone number: $phonenumber',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                ),
-              ],
-            ),
-          )));
 }

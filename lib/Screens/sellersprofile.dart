@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand/classes/Post.dart';
+import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:secondhand/classes/users.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class SellersProfile extends StatefulWidget {
-  SellersProfile({Key? key, required String Email}) : super(key: key);
+  const SellersProfile({Key? key}) : super(key: key);
 
   @override
   _SellersProfile createState() => _SellersProfile();
@@ -17,35 +18,71 @@ class _SellersProfile extends State<SellersProfile> {
   @override
   void initState() {
     super.initState();
+    // to get the sellers info
+    // to get the users info
+    // and  to know if the collection exists
+    //and to know if they talked before
     getuser();
-    setState(() {
-      
-    });
+
+    setState(() {});
   }
 
   String? image;
-  String? name;
-  String? email;
+  String? sellername;
+  String? usersname;
+  String? sellersemail;
+  String? usersemail;
   String? location;
   String? phonenumber;
+  bool exists = false;
   final Storage storage = Storage();
 
-  Future<Users> getuser() async {
-   final SharedPreferences preference = await SharedPreferences.getInstance();
-    email = preference.getString('sellersemail');
+  //for the seller info
+  Future getuser() async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    sellersemail = preference.getString('sellersemail');
+    // to get the user's name
+    usersemail = preference.getString('name');
+
+    //to get the seller's profile image
     image = await firebase_storage.FirebaseStorage.instance
-        .ref('users/$email')
+        .ref('users/$sellersemail')
         .getDownloadURL();
-    var value =
-        await FirebaseFirestore.instance.collection('users').doc(email).get();
+    //to get the sellers information
+    var value = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(sellersemail)
+        .get();
     Users _user = Users.fromMap(value.data() as Map<String, dynamic>);
-    name = _user.name;
+    sellername = _user.name;
     phonenumber = _user.phonenumber;
-    location= _user.location;
-    setState(() {
-      
-    });
-    return _user;
+    location = _user.location;
+
+    //for the users info
+    usersemail = preference.getString('email');
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(usersemail)
+        .collection("$usersemail's chats")
+        .doc(sellersemail)
+        .get();
+    if (snapshot.exists) {
+      exists = true;
+    }
+
+    final reverse = await FirebaseFirestore.instance
+        .collection('messeges')
+        .doc(sellersemail)
+        .collection('$sellersemail to $usersemail')
+        .doc(usersemail)
+        .get();
+    if (reverse.exists) {
+      Sharedpreference.revrsetalked(true);
+    } else {
+      Sharedpreference.revrsetalked(false);
+    }
+    setState(() {});
   }
 
   Stream<List<Post>> readPosts() => FirebaseFirestore.instance
@@ -61,12 +98,12 @@ class _SellersProfile extends State<SellersProfile> {
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData &&
-                    post.email == email) {
+                    post.email == sellersemail) {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                     child: Column(children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                         width: 300,
                         height: 200,
                         child: Image.network(
@@ -84,7 +121,7 @@ class _SellersProfile extends State<SellersProfile> {
                     ]),
                   );
                 }
-                return Text('');
+                return const Text('');
               }),
         ],
       );
@@ -96,7 +133,7 @@ class _SellersProfile extends State<SellersProfile> {
         centerTitle: true,
         backgroundColor: Colors.cyan,
         title: const Text(
-          'Profile',
+          "Seller's Profile",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -104,7 +141,7 @@ class _SellersProfile extends State<SellersProfile> {
         SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               ClipOval(
@@ -117,7 +154,7 @@ class _SellersProfile extends State<SellersProfile> {
                 ),
               ),
               Container(
-                child: Text(name ?? 'no name',
+                child: Text(sellername ?? 'no name',
                     style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.center),
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
@@ -125,15 +162,15 @@ class _SellersProfile extends State<SellersProfile> {
               Container(
                 child: Text(
                   'location: lives in $location ',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
               Container(
                 child: Text(
-                  'Email: $email',
-                  style: TextStyle(fontSize: 16),
+                  'Email: $sellersemail',
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -141,19 +178,69 @@ class _SellersProfile extends State<SellersProfile> {
               Container(
                 child: Text(
                   'Phone number: $phonenumber',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               ),
-              Divider(
+              !(sellersemail == usersemail)
+                  ? ElevatedButton(
+                      onPressed: () {
+                        DateTime time = DateTime.now();
+                        if (!exists) {
+                          FirebaseFirestore.instance
+                              .collection('chats')
+                              .doc(usersemail)
+                              .collection("$usersemail's chats")
+                              .doc(sellersemail)
+                              .set({
+                            'name': sellername,
+                            'email': sellersemail,
+                            'time': time
+                          });
+
+                          FirebaseFirestore.instance
+                              .collection('chats')
+                              .doc(sellersemail)
+                              .collection("$sellersemail's chats")
+                              .doc(usersemail)
+                              .set({
+                            'name': usersname,
+                            'email': usersemail,
+                            'time': time
+                          });
+
+                          FirebaseFirestore.instance
+                              .collection('messeges')
+                              .doc(usersemail)
+                              .collection('$usersemail to $sellersemail')
+                              .doc(sellersemail)
+                              .set({
+                            'messege': '',
+                            'time': time,
+                            'email': usersemail
+                          });
+                        }
+
+                        Navigator.pushNamed(context, '/chat');
+                      },
+                      child: const Text('send a messege'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.cyan),
+                        fixedSize: MaterialStateProperty.all(
+                            const Size.fromWidth(180)),
+                      ),
+                    )
+                  : const Text(''),
+              const Divider(
                 color: Colors.black,
               ),
               Text(
-                'your posts',
-                style: TextStyle(fontSize: 20),
+                "$sellername's posts",
+                style: const TextStyle(fontSize: 20),
               ),
-              Container(
+              SizedBox(
                   height: 450,
                   child: StreamBuilder<List<Post>>(
                     stream: readPosts(),
@@ -179,5 +266,4 @@ class _SellersProfile extends State<SellersProfile> {
       ]),
     );
   }
-
 }

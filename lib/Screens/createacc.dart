@@ -155,8 +155,6 @@ class _CreateaccState extends State<Createacc> {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    String? a = _firebaseAuth.currentUser!.uid;
-    print(a);
   }
 
   Future selectFile() async {

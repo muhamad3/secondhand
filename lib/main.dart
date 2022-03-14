@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/Home.dart';
+import 'package:secondhand/Screens/chats.dart';
 import 'package:secondhand/Screens/chatscren.dart';
 import 'package:secondhand/Screens/forgotpassword.dart';
 import 'package:secondhand/Screens/createacc.dart';
@@ -53,22 +54,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if(isfirsttime??false){
+
+    }
     return MaterialApp(
+      
       initialRoute: '/',
       routes: {
         '/': (context) => isfirsttime ?? true
             ? OnboardingState()
             : islogedin ?? true
-                ? Home()
-                : Login(),
-        '/login': (context) => Login(),
+                ? const Home()
+                : const Login(),
+        '/login': (context) => const Login(),
         '/createacc': (context) => const Createacc(),
         '/home': (context) => const Home(),
         '/post': (context) => const Posting(),
         '/profile': (context) => const Profile(),
-        '/sellersprofile': (context) =>  SellersProfile(Email: 'matin@gmail.com',),
-        '/forgotpassword': (context) =>  Forgotpassword(),
-        '/chat': (context) =>  ChatScreen(),
+        '/sellersprofile': (context) =>  const SellersProfile(),
+        '/forgotpassword': (context) =>  const Forgotpassword(),
+        '/chat': (context) =>  const ChatScreen(),
+        '/chats': (context) =>  const Chats(),
       },
     );
   }
@@ -81,8 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   islogedinf() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-    islogedin = preference.getBool('logedin');
-    print(islogedin);
+   islogedin = preference.getBool('logedin');
     setState(() {});
   }
 }

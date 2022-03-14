@@ -4,7 +4,7 @@ import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
-  NavigationDrawerWidget({Key? key}) : super(key: key);
+  const NavigationDrawerWidget({Key? key}) : super(key: key);
   @override
   _NavigationDrawerWidget createState() => _NavigationDrawerWidget();
 }
@@ -31,7 +31,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
         color: Colors.cyan,
         child: ListView(
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Row(
@@ -47,7 +47,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                 ),
                 Text(
                   ' $name \n $email \n $phonenumber',
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 )
               ],
             ),
@@ -71,7 +71,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
     required IconData icon,
     VoidCallback? onclick,
   }) {
-    final color = Colors.white;
+    const color = Colors.white;
     return ListTile(
       leading: Icon(
         icon,
@@ -79,7 +79,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
       ),
       title: Text(
         text,
-        style: TextStyle(color: color),
+        style: const TextStyle(color: color),
       ),
       onTap: onclick,
     );
@@ -93,11 +93,11 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
 
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
+    setState(() {});
     email = preference.getString('email');
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')
         .getDownloadURL();
-    setState(() {});
   }
 
   getphonenumber() async {

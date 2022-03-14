@@ -35,19 +35,19 @@ class _OnboardingStateState extends State<OnboardingState> {
             ),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Text(
                 subtitle,
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
             )
           ],
@@ -58,7 +58,7 @@ class _OnboardingStateState extends State<OnboardingState> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(bottom: 80),
+        margin: const EdgeInsets.only(bottom: 80),
         child: PageView(
           controller: controller,
           onPageChanged: (value) {
@@ -91,7 +91,7 @@ class _OnboardingStateState extends State<OnboardingState> {
       bottomSheet: isLastPage
           ? TextButton(
               style: TextButton.styleFrom(
-                  minimumSize: Size.fromHeight(80),
+                  minimumSize: const Size.fromHeight(80),
                   primary: Colors.cyan,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
@@ -99,13 +99,13 @@ class _OnboardingStateState extends State<OnboardingState> {
                 Sharedpreference.isfirsttime();
                 Navigator.popAndPushNamed(context, '/login');
               },
-              child: Text(
+              child: const Text(
                 'Get Started',
-                style: TextStyle(fontSize: 24),
+                style:  TextStyle(fontSize: 24),
               ))
           : Container(
               height: 80,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -113,23 +113,23 @@ class _OnboardingStateState extends State<OnboardingState> {
                       onPressed: () {
                         controller.jumpToPage(3);
                       },
-                      child: Text('SKIP')),
+                      child: const Text('SKIP')),
                   Center(
                       child: SmoothPageIndicator(
                           controller: controller,
                           count: 3,
                           onDotClicked: (index) {
                             controller.animateToPage(index,
-                                duration: Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut);
                           })),
                   TextButton(
                       onPressed: () {
                         controller.nextPage(
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut);
                       },
-                      child: Text('NEXT'))
+                      child: const Text('NEXT'))
                 ],
               ),
             ),
