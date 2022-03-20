@@ -5,8 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:secondhand/Screens/chats.dart';
-import 'package:secondhand/Screens/search.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:secondhand/classes/sharedpreferences.dart';
@@ -285,5 +283,5 @@ class _HomeState extends State<Home> {
         .getDownloadURL();
     setState(() {});
   }
-  
+
 }

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:secondhand/Screens/bottomnavigationbar.dart';
 import 'package:secondhand/Screens/home.dart';
 import 'package:secondhand/Screens/chats.dart';
 import 'package:secondhand/Screens/chatscreen.dart';
@@ -73,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         '/forgotpassword': (context) =>  const Forgotpassword(),
         '/chat': (context) =>  const ChatScreen(),
         '/chats': (context) =>  const Chats(),
+        '/search': (context) =>  const Search(),
       },
     );
   }
