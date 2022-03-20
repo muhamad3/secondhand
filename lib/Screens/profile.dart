@@ -24,11 +24,16 @@ class _Profile extends State<Profile> {
     setState(() {});
   }
 
-  int _selectedIndex = 3;
+  int _selectedIndex = 4;
   String? test;
     final items = <Widget>[
     const Icon(
       Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    const Icon(
+      Icons.search,
       size: 30,
       color: Colors.white,
     ),
@@ -57,10 +62,16 @@ class _Profile extends State<Profile> {
       Navigator.popAndPushNamed(context, '/home');
     }
     if (_selectedIndex == 1) {
-      Navigator.popAndPushNamed(context, '/post');
+      Navigator.popAndPushNamed(context, '/search');
     }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(context, '/chat');
+      Navigator.popAndPushNamed(context, '/post');
+    }
+    if (_selectedIndex == 3) {
+      Navigator.popAndPushNamed(context, '/chats');
+    }
+    if (_selectedIndex == 4) {
+      Navigator.popAndPushNamed(context, '/profile');
     }
   }
 

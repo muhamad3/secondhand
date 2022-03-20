@@ -23,9 +23,16 @@ class _Posting extends State<Posting> {
     super.initState();
     getemail();
   }
+  int _selectedIndex = 2;
+  int _value = 0;
     final item = <Widget>[
     const Icon(
       Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    const Icon(
+      Icons.search,
       size: 30,
       color: Colors.white,
     ),
@@ -45,20 +52,23 @@ class _Posting extends State<Posting> {
       color: Colors.white,
     ),
   ];
-  int _selectedIndex = 1;
-  int _value = 0;
-
-  void _onItemTapped(int index) {
+ void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
     if (_selectedIndex == 0) {
       Navigator.popAndPushNamed(context, '/home');
     }
+    if (_selectedIndex == 1) {
+      Navigator.popAndPushNamed(context, '/search');
+    }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(context, '/chat');
+      Navigator.popAndPushNamed(context, '/post');
     }
     if (_selectedIndex == 3) {
+      Navigator.popAndPushNamed(context, '/chats');
+    }
+    if (_selectedIndex == 4) {
       Navigator.popAndPushNamed(context, '/profile');
     }
   }

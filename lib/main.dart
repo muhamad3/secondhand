@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:secondhand/Screens/bottomnavigationbar.dart';
 import 'package:secondhand/Screens/home.dart';
 import 'package:secondhand/Screens/chats.dart';
 import 'package:secondhand/Screens/chatscreen.dart';
@@ -8,13 +9,14 @@ import 'package:secondhand/Screens/createacc.dart';
 import 'package:secondhand/Screens/onboardingstate.dart';
 import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
+import 'package:secondhand/Screens/search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
 import 'Screens/sellersprofile.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  
   runApp(const MyApp());
 }
 
@@ -49,14 +51,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     isfirstime();
-    islogedinf();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(isfirsttime??false){
-
-    }
     return MaterialApp(
       
       initialRoute: '/',
@@ -82,11 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
   isfirstime() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     isfirsttime = preference.getBool('firsttime');
-    setState(() {});
-  }
-
-  islogedinf() async {
-    final SharedPreferences preference = await SharedPreferences.getInstance();
    islogedin = preference.getBool('logedin');
     setState(() {});
   }

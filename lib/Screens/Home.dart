@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:secondhand/Screens/chats.dart';
+import 'package:secondhand/Screens/search.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:secondhand/classes/sharedpreferences.dart';
@@ -24,6 +26,11 @@ class _HomeState extends State<Home> {
   final items = <Widget>[
     const Icon(
       Icons.home,
+      size: 30,
+      color: Colors.white,
+    ),
+    const Icon(
+      Icons.search,
       size: 30,
       color: Colors.white,
     ),
@@ -54,13 +61,19 @@ class _HomeState extends State<Home> {
     setState(() {
       _selectedIndex = index;
     });
+    if (_selectedIndex == 0) {
+      Navigator.popAndPushNamed(context, '/home');
+    }
     if (_selectedIndex == 1) {
-      Navigator.popAndPushNamed(context, '/post');
+      Navigator.popAndPushNamed(context, '/search');
     }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(context, '/chats');
+      Navigator.popAndPushNamed(context, '/post');
     }
     if (_selectedIndex == 3) {
+      Navigator.popAndPushNamed(context, '/chats');
+    }
+    if (_selectedIndex == 4) {
       Navigator.popAndPushNamed(context, '/profile');
     }
   }
@@ -92,74 +105,74 @@ class _HomeState extends State<Home> {
       },
       child: Column(
         children: [
-      FutureBuilder(
-          future: storage.downloadurl('${post.name}${post.email}'),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if (select == 1) {
-              if (post.catagory == 'Tech') {
-                type = true;
-              } else {
-                type = false;
-              }
-            } else if (select == 2) {
-              if (post.catagory == 'Car') {
-                type = true;
-              } else {
-                type = false;
-              }
-            } else if (select == 3) {
-              if (post.catagory == 'Furniture') {
-                type = true;
-              } else {
-                type = false;
-              }
-            } else if (select == 4) {
-              if (post.catagory == 'Clothes') {
-                type = true;
-              } else {
-                type = false;
-              }
-            } else {
-              type = true;
-            }
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData &&
-                type!) {
-              return Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
-                    width: 300,
-                    height: 200,
-                    child: Image.network(
-                      snapshot.data ?? '',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('name:${post.name}'),
-                        Text('price:${post.price}'),
-                      ]),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text('email:${post.email}'),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    child: Text(
-                      post.description ?? ' no description available',
-                    ),
-                    margin: const EdgeInsets.all(20),
-                  )
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          }),
+          FutureBuilder(
+              future: storage.downloadurl('${post.name}${post.email}'),
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (select == 1) {
+                  if (post.catagory == 'Tech') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else if (select == 2) {
+                  if (post.catagory == 'Car') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else if (select == 3) {
+                  if (post.catagory == 'Furniture') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else if (select == 4) {
+                  if (post.catagory == 'Clothes') {
+                    type = true;
+                  } else {
+                    type = false;
+                  }
+                } else {
+                  type = true;
+                }
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData &&
+                    type!) {
+                  return Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                        width: 300,
+                        height: 200,
+                        child: Image.network(
+                          snapshot.data ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('name:${post.name}'),
+                            Text('price:${post.price}'),
+                          ]),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text('email:${post.email}'),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        child: Text(
+                          post.description ?? ' no description available',
+                        ),
+                        margin: const EdgeInsets.all(20),
+                      )
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
         ],
       ));
 
@@ -204,7 +217,8 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: const Text('Furniture', style:  TextStyle(color: Colors.white)),
+                label: const Text('Furniture',
+                    style: TextStyle(color: Colors.white)),
                 selected: select == 3 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -215,7 +229,8 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: const Text('Clothes', style:  TextStyle(color: Colors.white)),
+                label: const Text('Clothes',
+                    style: TextStyle(color: Colors.white)),
                 selected: select == 4 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -246,7 +261,7 @@ class _HomeState extends State<Home> {
           ))
         ]),
       ),
-      bottomNavigationBar: CurvedNavigationBar(
+         bottomNavigationBar: CurvedNavigationBar(
         height: 55,
         items: items,
         backgroundColor: Colors.transparent,
@@ -254,7 +269,7 @@ class _HomeState extends State<Home> {
         index: _selectedIndex,
         onTap: _onItemTapped,
       ),
-    );
+          );
   }
 
   getuser(String email) async {
@@ -270,5 +285,5 @@ class _HomeState extends State<Home> {
         .getDownloadURL();
     setState(() {});
   }
-
+  
 }

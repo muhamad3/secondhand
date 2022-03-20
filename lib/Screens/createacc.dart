@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -83,10 +84,16 @@ class _CreateaccState extends State<Createacc> {
             padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
           ),
           Container(
-            child: TextField(
+            child: TextFormField(
               controller: email,
+              textInputAction: TextInputAction.done,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: const InputDecoration(
-                  border:  OutlineInputBorder(), hintText: 'example@gmail.com'),
+                  border: OutlineInputBorder(), hintText: 'example@gmail.com'),
+              validator: (email) =>
+                  email != null && !EmailValidator.validate(email)
+                      ? 'enter a valid email '
+                      : null,
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
@@ -118,24 +125,27 @@ class _CreateaccState extends State<Createacc> {
           ),
           ElevatedButton(
             onPressed: () async {
-              Password = password?.value.text ?? '';
-              phonenumber = phonenum?.value.text ?? '';
-              Email = email?.value.text ?? 'no email available';
-              username = name?.value.text;
-              loc = location?.value.text;
-              await uploadFile();
+              if (file != null) {
+                Password = password?.value.text ?? '';
+                phonenumber = phonenum?.value.text ?? '';
+                Email = email?.value.text ?? 'no email available';
+                username = name?.value.text ?? '';
+                loc = location?.value.text ?? '';
+                await uploadFile();
+                await registerWithEmailAndPassword(Email, Password);
+                FirebaseFirestore.instance.collection('users').doc(Email).set({
+                  'email': Email,
+                  'name': username,
+                  'location': loc,
+                  'phonenumber': phonenumber
+                });
 
-              await registerWithEmailAndPassword(Email, Password);
-              FirebaseFirestore.instance.collection('users').doc(Email).set({
-                'email': Email,
-                'name': username,
-                'location': loc,
-                'phonenumber': phonenumber
-              });
-
-              Sharedpreference.setuser(username, Email, loc, phonenumber);
-              Sharedpreference.islogedin();
-              Navigator.popAndPushNamed(this.context, '/home');
+                Sharedpreference.setuser(username, Email, loc, phonenumber);
+                Sharedpreference.islogedin();
+                Navigator.popAndPushNamed(this.context, '/home');
+              }else{
+                
+              }
             },
             child: const Text('Register'),
             style: ButtonStyle(

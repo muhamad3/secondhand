@@ -35,6 +35,11 @@ class _ChatsState extends State<Chats> {
       color: Colors.white,
     ),
     const Icon(
+      Icons.search,
+      color: Colors.white,
+      size: 30,
+    ),
+    const Icon(
       Icons.add_box,
       color: Colors.white,
       size: 30,
@@ -51,8 +56,8 @@ class _ChatsState extends State<Chats> {
     ),
   ];
   final Storage storage = Storage();
-  int _selectedIndex = 2;
-  void _onItemTapped(int index) {
+  int _selectedIndex = 3;
+   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -60,12 +65,15 @@ class _ChatsState extends State<Chats> {
       Navigator.popAndPushNamed(context, '/home');
     }
     if (_selectedIndex == 1) {
-      Navigator.popAndPushNamed(context, '/post');
+      Navigator.popAndPushNamed(context, '/search');
     }
     if (_selectedIndex == 2) {
-      Navigator.popAndPushNamed(context, '/chats');
+      Navigator.popAndPushNamed(context, '/post');
     }
     if (_selectedIndex == 3) {
+      Navigator.popAndPushNamed(context, '/chats');
+    }
+    if (_selectedIndex == 4) {
       Navigator.popAndPushNamed(context, '/profile');
     }
   }

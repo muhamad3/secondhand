@@ -32,7 +32,6 @@ class _ChatScreenState extends State<ChatScreen> {
   String? sellersemail;
   TextEditingController msg = TextEditingController();
   bool reverse = false;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   color: Colors.white, fontSize: 16),
                             );
                           }
-                           return const SizedBox.shrink();
+                          return const SizedBox.shrink();
                         });
                   }
 
@@ -113,22 +112,22 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           SizedBox(
-            height:60 ,
+            height: 60,
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: msg,
-                    decoration:const InputDecoration(
-                      hintText: 'Type your messege here'
-                    ),
+                    decoration: const InputDecoration(
+                        hintText: 'Type your messege here'),
                   ),
                 ),
                 SizedBox(
-                  width:60,
+                  width: 60,
                   child: ElevatedButton(
                     onPressed: () async {
                       String messege = msg.value.text.trim();
+                      msg.clear();
                       if (messege != '') {
                         DateTime time = DateTime.now();
                         if (!reverse) {

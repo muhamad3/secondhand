@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/Users.dart';
@@ -55,11 +56,17 @@ class _Login extends State<Login> {
           height: 20,
         ),
         Container(
-          child: TextField(
-            controller: email,
-            decoration: const InputDecoration(
-                border:  OutlineInputBorder(), hintText: 'example@gmail.com'),
-          ),
+          child: TextFormField(
+              controller: email,
+              textInputAction: TextInputAction.done,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'example@gmail.com'),
+              validator: (email) =>
+                  email != null && !EmailValidator.validate(email)
+                      ? 'enter a valid email '
+                      : null,
+            ),
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         ),
         Container(
