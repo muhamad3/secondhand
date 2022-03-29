@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -21,11 +22,14 @@ class _SearchState extends State<Search> {
   }
 
   String? useremail;
+  String? image;
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     useremail = preference.getString('email');
     setState(() {});
   }
+
+
 
   final items = <Widget>[
     const Icon(
@@ -78,15 +82,6 @@ class _SearchState extends State<Search> {
     }
   }
 
-// test
-  getimage(String email) async {
-    String image = await firebase_storage.FirebaseStorage.instance
-        .ref('users/$email')
-        .getDownloadURL();
-    return image;
-  }
-
-//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +107,9 @@ class _SearchState extends State<Search> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot data = snapshot.data!.docs[index];
-                      if (name != null ?data['name'].substring(0, name!.length) == name:true) {
+                      if (name != null
+                          ? data['name'].substring(0, name!.length) == name
+                          : true) {
                         return Column(
                           children: [
                             ListTile(
@@ -121,14 +118,19 @@ class _SearchState extends State<Search> {
                                 style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              // leading: CircleAvatar(
-                              //   child: Image.network(
-                              //     getimage(data['email'])  ,
-                              //     width: 100,
-                              //     height: 50,
-                              //     fit: BoxFit.contain,
-                              //   ),
-                              // ),
+                              leading: ClipOval(
+                                child: FutureBuilder<dynamic>(
+  future: FirebaseApi.getimage(data['email']),
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      return Image.network(
+          snapshot.data!,height: 50,width: 50,fit: BoxFit.cover,
+      );
+    }
+    return const CircularProgressIndicator();
+  }
+),
+                              ),
                             )
                           ],
                         );

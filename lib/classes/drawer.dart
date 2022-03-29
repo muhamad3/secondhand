@@ -23,6 +23,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
   String? email;
   String? image;
   String? phonenumber;
+  bool? isdark;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,12 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                   Navigator.pop(context);
                   Navigator.popAndPushNamed(context, '/login');
                 }),
+            buildMenuItem(
+                text: 'DarkTheme',
+                icon: Icons.dark_mode,
+                onclick: () {
+                  Sharedpreference.dark(false);
+                }),
           ],
         ),
       ),
@@ -94,6 +101,7 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
   getemail() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
 
+    isdark = preference.getBool('isdark');
     email = preference.getString('email');
     image = await firebase_storage.FirebaseStorage.instance
         .ref('users/$email')

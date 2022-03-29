@@ -9,6 +9,7 @@ import 'package:secondhand/Screens/onboardingstate.dart';
 import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
 import 'package:secondhand/Screens/search.dart';
+import 'package:secondhand/classes/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
 import 'Screens/sellersprofile.dart';
@@ -16,28 +17,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   
-  runApp(const MyApp());
+  runApp( const MyHomePage());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key,}) : super(key: key);
 
-  final String title;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -46,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool? isfirsttime;
   bool? islogedin;
+  bool? isdark;
   @override
   void initState() {
     super.initState();
@@ -55,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
+      theme: isdark?? false ?darkTheme :lightTheme,
       initialRoute: '/',
       routes: {
         '/': (context) => isfirsttime ?? true
@@ -81,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     isfirsttime = preference.getBool('firsttime');
    islogedin = preference.getBool('logedin');
+   isdark = preference.getBool('isdark');
     setState(() {});
   }
 }

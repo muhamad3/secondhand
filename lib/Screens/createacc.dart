@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import '../classes/firebaseapi.dart';
 import '../classes/sharedpreferences.dart';
@@ -106,6 +107,19 @@ class _CreateaccState extends State<Createacc> {
             ),
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           ),
+          FlutterPwValidator(
+            controller: password!,
+            minLength: 6,
+            uppercaseCharCount: 1,
+            numericCharCount: 3,
+            width: 400,
+            height: 150,
+            onSuccess: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("You can use this password Password")));
+            },
+            // onFail: yourCallbackFunction
+          ),
           Container(
             child: TextField(
               controller: phonenum,
@@ -125,12 +139,12 @@ class _CreateaccState extends State<Createacc> {
           ),
           ElevatedButton(
             onPressed: () async {
-              if (file != null) {
+              if (file != null && name != null && phonenum != null) {
                 Password = password?.value.text ?? '';
                 phonenumber = phonenum?.value.text ?? '';
-                Email = email?.value.text ?? 'no email available';
+                Email = email?.value.text ?? '';
                 username = name?.value.text ?? '';
-                loc = location?.value.text ?? '';
+                loc = location?.value.text ?? 'location is not available';
                 await uploadFile();
                 await registerWithEmailAndPassword(Email, Password);
                 FirebaseFirestore.instance.collection('users').doc(Email).set({
@@ -144,7 +158,8 @@ class _CreateaccState extends State<Createacc> {
                 Sharedpreference.islogedin();
                 Navigator.popAndPushNamed(this.context, '/home');
               }else{
-                
+                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("make sure to add your name and phone number")));
               }
             },
             child: const Text('Register'),

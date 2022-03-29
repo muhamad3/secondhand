@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand/classes/Post.dart';
+import 'package:secondhand/classes/scrolltohide.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -15,6 +16,7 @@ class SellersProfile extends StatefulWidget {
 }
 
 class _SellersProfile extends State<SellersProfile> {
+    late ScrollController controller;
   @override
   void initState() {
     super.initState();
@@ -23,8 +25,15 @@ class _SellersProfile extends State<SellersProfile> {
     // and  to know if the collection exists
     //and to know if they talked before
     getuser();
-
+    controller = ScrollController();
     setState(() {});
+  }
+
+   @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
   }
 
   String? image;
@@ -97,13 +106,12 @@ class _SellersProfile extends State<SellersProfile> {
               future: storage.downloadurl('${post.name}${post.email}'),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData &&
-                    post.email == sellersemail) {
+                    snapshot.hasData && post.email == sellersemail) {
                   return Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                     child: Column(children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                         width: 300,
                         height: 200,
                         child: Image.network(
@@ -141,8 +149,12 @@ class _SellersProfile extends State<SellersProfile> {
         SingleChildScrollView(
           child: Stack(children: <Widget>[
             Column(children: [
-              const SizedBox(
-                height: 25,
+              ScrollToDideWideget(
+                  controller: controller,
+                  child: Column(
+                 children: [
+                   const SizedBox(
+                    height: 25,
               ),
               ClipOval(
                 child: Image.network(
@@ -239,9 +251,9 @@ class _SellersProfile extends State<SellersProfile> {
               Text(
                 "$sellername's posts",
                 style: const TextStyle(fontSize: 20),
-              ),
+              ),]),),
               SizedBox(
-                  height: 450,
+                  height: 600,
                   child: StreamBuilder<List<Post>>(
                     stream: readPosts(),
                     builder: (context, snapshot) {
@@ -251,6 +263,7 @@ class _SellersProfile extends State<SellersProfile> {
                       if (snapshot.hasData) {
                         final post = snapshot.data!;
                         return ListView(
+                          controller: controller,
                           children: post.map(buildpost).toList(),
                         );
                       } else {

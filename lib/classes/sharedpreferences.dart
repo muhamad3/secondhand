@@ -7,7 +7,6 @@ class Sharedpreference {
     preference.setString('email', email ?? 'no email available');
     preference.setString('location', location ?? 'no location available');
     preference.setString('phonenumber', phonenumber ?? 'no location available');
-    
   }
 
   static Future<void> setemail(email) async {
@@ -39,4 +38,9 @@ class Sharedpreference {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     preference.setBool('logedin', false);
   }
+  static Future<void> dark(bool isdark) async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    preference.setBool('isdark', isdark);
+  }
+
 }

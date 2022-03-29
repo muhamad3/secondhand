@@ -47,9 +47,12 @@ class _ForgotpasswordState extends State<Forgotpassword> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
               ),
-              onPressed: () {
-                opendialog();
-                Resetpassword();
+              onPressed: () async{
+                ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                content: Text("an email has been sent to ${emailcontroller.text}")));
+                await FirebaseAuth.instance
+                .sendPasswordResetEmail(email: emailcontroller.text.trim());
+                Navigator.popAndPushNamed(context, '/login');
               },
               child: const Text('Reset Password')),
           TextButton(
@@ -66,20 +69,6 @@ class _ForgotpasswordState extends State<Forgotpassword> {
     );
   }
 
-  Future opendialog() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-              content: Container(
-            width: 300,
-            height: 100,
-            child: Text(
-                'an email has been sent to this account ${emailcontroller.text}'),
-          )));
 
-  // ignore: non_constant_identifier_names
-  Future Resetpassword() async {
-  await FirebaseAuth.instance
-        .sendPasswordResetEmail(email: emailcontroller.text.trim());
-    Navigator.popAndPushNamed(context, '/login');
-  }
+
 }

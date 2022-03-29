@@ -5,8 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:secondhand/Screens/search.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import '../classes/Users.dart';
@@ -20,6 +22,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final ScrollController _scrollController = ScrollController();
   int _selectedIndex = 0;
   final items = <Widget>[
     const Icon(
@@ -149,7 +152,20 @@ class _HomeState extends State<Home> {
                       ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                          children: [ FutureBuilder<dynamic>(
+  future: FirebaseApi.getimage(post.email!),
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      return ClipOval(
+        
+        child: Image.network(
+            snapshot.data!,height: 50,width: 50,fit: BoxFit.cover,
+        ),
+      );
+    }
+    return const CircularProgressIndicator();
+  }
+),
                             Text('name:${post.name}'),
                             Text('price:${post.price}'),
                           ]),
@@ -193,7 +209,8 @@ class _HomeState extends State<Home> {
               ChoiceChip(
                 selectedColor: Colors.cyan[500],
                 backgroundColor: Colors.cyan[300],
-                label: const Text('Tech', style: TextStyle(color: Colors.white)),
+                label:
+                    const Text('Tech', style: TextStyle(color: Colors.white)),
                 selected: select == 1 ? true : false,
                 onSelected: (bool newValue) {
                   setState(() {
@@ -248,6 +265,7 @@ class _HomeState extends State<Home> {
               if (snapshot.hasData) {
                 final post = snapshot.data!;
                 return ListView(
+                  controller: _scrollController,
                   children: post.map(buildpost).toList(),
                 );
               } else {
@@ -259,7 +277,7 @@ class _HomeState extends State<Home> {
           ))
         ]),
       ),
-         bottomNavigationBar: CurvedNavigationBar(
+      bottomNavigationBar: CurvedNavigationBar(
         height: 55,
         items: items,
         backgroundColor: Colors.transparent,
@@ -267,7 +285,7 @@ class _HomeState extends State<Home> {
         index: _selectedIndex,
         onTap: _onItemTapped,
       ),
-          );
+    );
   }
 
   getuser(String email) async {
@@ -283,5 +301,4 @@ class _HomeState extends State<Home> {
         .getDownloadURL();
     setState(() {});
   }
-
 }

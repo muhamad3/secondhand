@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:secondhand/classes/Post.dart';
 import 'package:secondhand/classes/drawer.dart';
+import 'package:secondhand/classes/scrolltohide.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,13 +17,23 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile extends State<Profile> {
+  late ScrollController controller;
   @override
   void initState() {
     super.initState();
     // to get email and name and location and phone number and image of user
     getemail();
+    controller = ScrollController();
     setState(() {});
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
 
   int _selectedIndex = 4;
   String? test;
@@ -125,6 +136,9 @@ class _Profile extends State<Profile> {
                                 .ref('post/${post.name}${post.email}')
                                 .delete();
                           },
+                          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+          ),
                           child: const Text('delete this post'))
                     ]),
                   );
@@ -144,58 +158,65 @@ class _Profile extends State<Profile> {
       body: Stack(children: <Widget>[
         SingleChildScrollView(
           child: Stack(children: <Widget>[
-            Column(children: [
-              const SizedBox(
-                height: 25,
-              ),
-              ClipOval(
-                child: Image.network(
-                  image ??
-                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                  width: 150,
-                  height: 150,
-                  fit: BoxFit.cover,
+            Column(
+              children: [
+                ScrollToDideWideget(
+                  controller: controller,
+                  child:  Column(
+                      children:[
+                              const SizedBox(
+                    height: 25,
+                              ),
+                              ClipOval(
+                    child: Image.network(
+                      image ??
+                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                              ),
+                              Container(
+                    child: Text(name ?? 'name',
+                        style: const TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center),
+                    padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+                              ),
+                              Container(
+                    child: Text(
+                      'location: lives in $location',
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                              ),
+                              Container(
+                    child: Text(
+                      'Email: $email',
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                              ),
+                              Container(
+                    child: Text(
+                      'Phone number: $phonenumber',
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                              ),
+                              const Divider(
+                    color: Colors.black,
+                              ),
+                              const Text(
+                    'your posts',
+                    style:  TextStyle(fontSize: 20),
+                              ),]
+                  ),
                 ),
-              ),
-              Container(
-                child: Text(name ?? 'name',
-                    style: const TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center),
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'location: lives in $location',
-                  style: const TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'Email: $email',
-                  style: const TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              Container(
-                child: Text(
-                  'Phone number: $phonenumber',
-                  style: const TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              ),
-              const Divider(
-                color: Colors.black,
-              ),
-              const Text(
-                'your posts',
-                style:  TextStyle(fontSize: 20),
-              ),
               SizedBox(
-                  height: 450,
+                  height: 600,
                   child: StreamBuilder<List<Post>>(
                     stream: readPosts(),
                     builder: (context, snapshot) {
@@ -205,6 +226,7 @@ class _Profile extends State<Profile> {
                       if (snapshot.hasData) {
                         final post = snapshot.data!;
                         return ListView(
+                          controller: controller,
                           children: post.map(buildpost).toList(),
                         );
                       } else {

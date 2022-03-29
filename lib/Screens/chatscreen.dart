@@ -28,6 +28,15 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {});
   }
 
+  final ScrollController _controller = ScrollController();
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.linear,
+    );
+  }
+
   String? usersemail;
   String? sellersemail;
   TextEditingController msg = TextEditingController();
@@ -76,6 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     List _time = _docs.map((e) => e["time"]).toList();
 
                     return ListView.builder(
+                        controller: _controller,
                         itemCount: _users.length,
                         itemBuilder: (context, index) {
                           //to show only hours and minutes from time stamp
@@ -152,6 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           });
                         }
                       }
+                      _scrollDown();
                     },
                     child: const Icon(Icons.send),
                   ),
