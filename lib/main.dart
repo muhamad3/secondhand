@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/Screens/home.dart';
@@ -42,8 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: isdark?? false ?darkTheme :lightTheme,
+    return AdaptiveTheme(
+      light: ThemeData.light(),
+       initial: AdaptiveThemeMode.system, 
+       dark: ThemeData.dark(),
+       builder: (light , dark)=> 
+        MaterialApp(
+      theme: light,
+      darkTheme: dark,
       initialRoute: '/',
       routes: {
         '/': (context) => isfirsttime ?? true
@@ -62,7 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
         '/chats': (context) =>  const Chats(),
         '/search': (context) =>  const Search(),
       },
-    );
+    )
+       ,
+       );
+   
   }
 
   isfirstime() async {

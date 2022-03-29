@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
@@ -62,10 +63,17 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                   Navigator.popAndPushNamed(context, '/login');
                 }),
             buildMenuItem(
-                text: 'DarkTheme',
-                icon: Icons.dark_mode,
+                text: isdark??false ?'LightTheme':'DarkTheme',
+                icon: isdark??false? Icons.sunny:Icons.dark_mode,
                 onclick: () {
-                  Sharedpreference.dark(false);
+                  setState(() {
+                    isdark = !isdark!;
+                    isdark! ? AdaptiveTheme.of(context).setDark() : AdaptiveTheme.of(context).setLight();
+                    Sharedpreference.dark(isdark!);
+                  });
+                  
+                  
+        
                 }),
           ],
         ),
