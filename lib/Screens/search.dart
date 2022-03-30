@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:secondhand/classes/firebaseapi.dart';
+import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -112,7 +113,12 @@ class _SearchState extends State<Search> {
                           : true) {
                         return Column(
                           children: [
-                            ListTile(
+                            GestureDetector(
+      onTap: () async {
+        Sharedpreference.sellersemail(data['email']);
+        Navigator.pushNamed(context, '/sellersprofile');
+      },
+      child: ListTile(
                               title: Text(
                                 data['name'],
                                 style: const TextStyle(
@@ -131,7 +137,7 @@ class _SearchState extends State<Search> {
   }
 ),
                               ),
-                            )
+                               )   )
                           ],
                         );
                       } else {

@@ -177,30 +177,30 @@ class _Profile extends State<Profile> {
                     ),
                               ),
                               Container(
-                    child: Text(name ?? 'name',
+                    child: Text(name ?? 'please wait',
                         style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.center),
                     padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
                               ),
                               Container(
-                    child: Text(
-                      'location: lives in $location',
+                    child: Text(location !=null?
+                      'location: lives in $location':'',
                       style: const TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                               ),
                               Container(
-                    child: Text(
-                      'Email: $email',
+                    child: Text(email != null ?
+                      'Email: $email':'',
                       style: const TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                               ),
                               Container(
-                    child: Text(
-                      'Phone number: $phonenumber',
+                    child: Text(phonenumber != null?
+                      'Phone number: $phonenumber':'',
                       style: const TextStyle(fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
@@ -216,7 +216,7 @@ class _Profile extends State<Profile> {
                   ),
                 ),
               SizedBox(
-                  height: 600,
+                  height: 700,
                   child: StreamBuilder<List<Post>>(
                     stream: readPosts(),
                     builder: (context, snapshot) {

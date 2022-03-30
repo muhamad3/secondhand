@@ -10,7 +10,6 @@ import 'package:secondhand/Screens/onboardingstate.dart';
 import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
 import 'package:secondhand/Screens/search.dart';
-import 'package:secondhand/classes/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
 import 'Screens/sellersprofile.dart';

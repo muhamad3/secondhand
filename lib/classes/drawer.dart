@@ -63,17 +63,19 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                   Navigator.popAndPushNamed(context, '/login');
                 }),
             buildMenuItem(
-                text: isdark??false ?'LightTheme':'DarkTheme',
-                icon: isdark??false? Icons.sunny:Icons.dark_mode,
+                text: isdark ?? false ? 'LightTheme' : 'DarkTheme',
+                icon: isdark ?? false
+                    ? Icons.wb_sunny_outlined
+                    : Icons.dark_mode_outlined,
                 onclick: () {
                   setState(() {
+                    isdark ??= true;
                     isdark = !isdark!;
-                    isdark! ? AdaptiveTheme.of(context).setDark() : AdaptiveTheme.of(context).setLight();
+                    isdark!
+                        ? AdaptiveTheme.of(context).setDark()
+                        : AdaptiveTheme.of(context).setLight();
                     Sharedpreference.dark(isdark!);
                   });
-                  
-                  
-        
                 }),
           ],
         ),
