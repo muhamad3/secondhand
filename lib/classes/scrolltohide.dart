@@ -19,6 +19,7 @@ class ScrollToDideWideget extends StatefulWidget {
 class _ScrollToDideWidegetState extends State<ScrollToDideWideget> {
   bool isVisible = true;
 
+  @override
   void initState() {
     super.initState();
     widget.controller.addListener(listen);

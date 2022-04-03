@@ -8,7 +8,7 @@ import 'package:secondhand/classes/storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_local_localizations.dart';
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -164,7 +164,10 @@ class _Profile extends State<Profile> {
                   controller: controller,
                   child:  Column(
                       children:[
-                              const SizedBox(
+                               SizedBox(
+                                child: Text(AppLocalizations.of(context)!.language=="English" ?
+                                  AppLocalizations.of(context)!.language:"سدفسدفاسشيڕ",
+                                ),
                     height: 25,
                               ),
                               ClipOval(

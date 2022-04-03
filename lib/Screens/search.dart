@@ -5,7 +5,6 @@ import 'package:secondhand/classes/firebaseapi.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';
 import 'package:secondhand/classes/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
