@@ -42,5 +42,8 @@ class Sharedpreference {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     preference.setBool('isdark', isdark);
   }
-
+  static Future<void> language(lan) async {
+    final SharedPreferences preference = await SharedPreferences.getInstance();
+    preference.setString('language', lan ?? 'en');
+  }
 }

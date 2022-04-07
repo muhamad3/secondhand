@@ -165,8 +165,7 @@ class _Profile extends State<Profile> {
                   child:  Column(
                       children:[
                                SizedBox(
-                                child: Text(AppLocalizations.of(context)!.language=="English" ?
-                                  AppLocalizations.of(context)!.language:"سدفسدفاسشيڕ",
+                                child: Text(AppLocalizations.of(context)!.language
                                 ),
                     height: 25,
                               ),

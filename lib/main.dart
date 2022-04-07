@@ -18,18 +18,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/Login.dart';
 import 'Screens/sellersprofile.dart';
 import 'package:flutter_gen/gen_l10n/app_local_localizations.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
-  runApp( const MyHomePage());
+
+  runApp(const MyHomePage());
 }
 
-
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key,}) : super(key: key);
-
-
+  const MyHomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -48,55 +48,50 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
-      light: ThemeData.light(),
-       initial: AdaptiveThemeMode.system, 
-       dark: ThemeData.dark(),
-       builder: (light , dark)=> ChangeNotifierProvider(
-          create: (context)=> LocaleProvider(),
-          builder: (context, child) {
-          final provider = Provider.of<LocaleProvider>(context);
-         
-        return MaterialApp(
-          locale: provider.locale,
-          supportedLocales: L10n.all,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-
-          ],
-      theme: light,
-      darkTheme: dark,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => isfirsttime ?? true
-            ? OnboardingState()
-            : islogedin ?? true
-                ? const Home()
-                : const Login(),
-        '/login': (context) => const Login(),
-        '/createacc': (context) => const Createacc(),
-        '/home': (context) => const Home(),
-        '/post': (context) => const Posting(),
-        '/profile': (context) => const Profile(),
-        '/sellersprofile': (context) =>  const SellersProfile(),
-        '/forgotpassword': (context) =>  const Forgotpassword(),
-        '/chat': (context) =>  const ChatScreen(),
-        '/chats': (context) =>  const Chats(),
-        '/search': (context) =>  const Search(),
-      });
-    })
-       
-       );
-   
+        light: ThemeData.light(),
+        initial: AdaptiveThemeMode.system,
+        dark: ThemeData.dark(),
+        builder: (light, dark) => ChangeNotifierProvider(
+            create: (context) => LocaleProvider(),
+            builder: (context, child) {
+              final provider = Provider.of<LocaleProvider>(context);
+              return MaterialApp(
+                  locale: provider.locale,
+                  supportedLocales: L10n.all,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  theme: light,
+                  darkTheme: dark,
+                  initialRoute: '/',
+                  routes: {
+                    '/': (context) => isfirsttime ?? true
+                        ? OnboardingState()
+                        : islogedin ?? true
+                            ? const Home()
+                            : const Login(),
+                    '/login': (context) => const Login(),
+                    '/createacc': (context) => const Createacc(),
+                    '/home': (context) => const Home(),
+                    '/post': (context) => const Posting(),
+                    '/profile': (context) => const Profile(),
+                    '/sellersprofile': (context) => const SellersProfile(),
+                    '/forgotpassword': (context) => const Forgotpassword(),
+                    '/chat': (context) => const ChatScreen(),
+                    '/chats': (context) => const Chats(),
+                    '/search': (context) => const Search(),
+                  });
+            }));
   }
 
   isfirstime() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
     isfirsttime = preference.getBool('firsttime');
-   islogedin = preference.getBool('logedin');
-   isdark = preference.getBool('isdark');
+    islogedin = preference.getBool('logedin');
+    isdark = preference.getBool('isdark');
     setState(() {});
   }
 }
