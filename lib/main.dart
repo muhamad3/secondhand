@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool? isfirsttime;
+  bool isfirsttime = false;
   bool? islogedin;
   bool? isdark;
   @override
@@ -68,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   darkTheme: dark,
                   initialRoute: '/',
                   routes: {
-                    '/': (context) => isfirsttime ?? true
-                        ? OnboardingState()
-                        : islogedin ?? true
+                '/': (context) =>  !isfirsttime 
+                        ?islogedin ?? true
                             ? const Home()
-                            : const Login(),
+                            : const Login() 
+                        : OnboardingState(),
                     '/login': (context) => const Login(),
                     '/createacc': (context) => const Createacc(),
                     '/home': (context) => const Home(),
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   isfirstime() async {
     final SharedPreferences preference = await SharedPreferences.getInstance();
-    isfirsttime = preference.getBool('firsttime');
+    isfirsttime = preference.getBool('firsttime') ?? false;
     islogedin = preference.getBool('logedin');
     isdark = preference.getBool('isdark');
     setState(() {});

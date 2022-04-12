@@ -156,7 +156,6 @@ class _HomeState extends State<Home> {
   builder: (context, snapshot) {
     if (snapshot.hasData) {
       return ClipOval(
-        
         child: Image.network(
             snapshot.data!,height: 50,width: 50,fit: BoxFit.cover,
         ),
@@ -165,13 +164,10 @@ class _HomeState extends State<Home> {
     return const CircularProgressIndicator();
   }
 ),
+                        
                             Text('name:${post.name}'),
                             Text('price:${post.price}'),
                           ]),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text('email:${post.email}'),
                       const SizedBox(
                         height: 5,
                       ),
