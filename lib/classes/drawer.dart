@@ -57,13 +57,10 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
               ],
             ),
             buildMenuItem(
-                text: 'Logout',
-                icon: Icons.power_settings_new,
+                text: 'Edit Profile',
+                icon: Icons.edit,
                 onclick: () {
-                  Sharedpreference.setuser('', '', '', '');
-                  Sharedpreference.isnotlogedin();
-                  Navigator.pop(context);
-                  Navigator.popAndPushNamed(context, '/login');
+                  Navigator.pushNamed(context, '/profiledit');
                 }),
             buildMenuItem(
                 text: isdark ?? false ? 'LightTheme' : 'DarkTheme',
@@ -91,6 +88,15 @@ class _NavigationDrawerWidget extends State<NavigationDrawerWidget> {
                     final locale = provide.locale;
                 provider.setLocale(locale);
                                  }),
+            buildMenuItem(
+                text: 'Logout',
+                icon: Icons.power_settings_new,
+                onclick: () {
+                  Sharedpreference.setuser('', '', '', '');
+                  Sharedpreference.isnotlogedin();
+                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/login');
+                }),
           ],
         ),
       ),

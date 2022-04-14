@@ -11,6 +11,7 @@ import 'package:secondhand/Screens/createacc.dart';
 import 'package:secondhand/Screens/onboardingstate.dart';
 import 'package:secondhand/Screens/posting.dart';
 import 'package:secondhand/Screens/profile.dart';
+import 'package:secondhand/Screens/profilediting.dart';
 import 'package:secondhand/Screens/search.dart';
 import 'package:secondhand/classes/localeprovider.dart';
 import 'package:secondhand/l10n/l10n.dart';
@@ -83,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     '/chat': (context) => const ChatScreen(),
                     '/chats': (context) => const Chats(),
                     '/search': (context) => const Search(),
+                    '/profiledit': (context) => const Profiledit(),
                   });
             }));
   }
