@@ -1,7 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:intl/locale.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand/classes/localeprovider.dart';
 import 'package:secondhand/classes/sharedpreferences.dart';

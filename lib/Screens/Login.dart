@@ -57,16 +57,16 @@ class _Login extends State<Login> {
         ),
         Container(
           child: TextFormField(
-              controller: email,
-              textInputAction: TextInputAction.done,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'example@gmail.com'),
-              validator: (email) =>
-                  email != null && !EmailValidator.validate(email)
-                      ? 'enter a valid email '
-                      : null,
-            ),
+            controller: email,
+            textInputAction: TextInputAction.done,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'example@gmail.com'),
+            validator: (email) =>
+                email != null && !EmailValidator.validate(email)
+                    ? 'enter a valid email '
+                    : null,
+          ),
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         ),
         Container(
@@ -84,9 +84,10 @@ class _Login extends State<Login> {
             Email = Email.trim();
             Email = Email.toLowerCase();
             Password = password.value.text;
+            // to get the user information
             getuser();
+            //to login and change screens and update the shared prefrence login status
             loginWithEmailAndPassword(Email, Password);
-            Sharedpreference.islogedin();
           },
           child: const Text('Login'),
           style: ButtonStyle(
@@ -102,14 +103,18 @@ class _Login extends State<Login> {
                 onPressed: () {
                   Navigator.popAndPushNamed(context, '/createacc');
                 },
-                child: const Text("create one",style: TextStyle(color: Colors.cyan))),
+                child: const Text("create one",
+                    style: TextStyle(color: Colors.cyan))),
           ],
         ),
         TextButton(
             onPressed: () {
               Navigator.popAndPushNamed(context, '/forgotpassword');
             },
-            child: const Text("Forgot Password?",style: TextStyle(color: Colors.cyan),))
+            child: const Text(
+              "Forgot Password?",
+              style: TextStyle(color: Colors.cyan),
+            ))
       ],
     ));
   }
@@ -117,6 +122,9 @@ class _Login extends State<Login> {
   loginWithEmailAndPassword(String email, String password) async {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => Navigator.popAndPushNamed(context, '/home'));
+        .then((value) {
+          Sharedpreference.islogedin();
+          Navigator.popAndPushNamed(context, '/home');
+    });
   }
 }
